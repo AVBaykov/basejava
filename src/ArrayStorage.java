@@ -17,6 +17,8 @@ public class ArrayStorage {
     void delete(String uuid) {
     }
 
+    void testMethod(String s) {}
+
     /**
      * @return array, contains only Resumes in storage (without null)
      */
