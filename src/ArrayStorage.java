@@ -7,41 +7,37 @@ import java.util.Arrays;
 public class ArrayStorage {
     Resume[] storage = new Resume[10000];
 
+    private static int size;
+
     void clear() {
-        storage = new Resume[10000];
+        Arrays.fill(storage, 0,size, null);
+        size = 0;
     }
 
     void save(Resume r) {
-        for (int i = 0; i < storage.length ; i++) {
-            if (storage[i] == null) {
-                storage[i] = r;
-                break;
-            }
-        }
+        storage[size] = r;
+        size++;
     }
 
     Resume get(String uuid) {
-        for (int i = 0; i < size(); i++) {
+        for (int i = 0; i < size; i++) {
             if (storage[i].uuid.equals(uuid)) {
                 return storage[i];
             }
         }
-        Resume absence = new Resume();
-        absence.uuid = "Нет резюме с таким id";
-        return absence;
+        return null;
     }
 
     void delete(String uuid) {
-        for (int i = 0; i < storage.length; i++) {
-            if (storage[i] == null) break;
+        for (int i = 0; i < size; i++) {
 
             if (storage[i].uuid.equals(uuid)) {
                 storage[i] = storage[i+1];
 
-                for (int j = i+1; j < size(); j++) {
+                for (int j = i+1; j < size; j++) {
                     storage[j] = storage[j+1];
                 }
-
+                size--;
                 break;
             }
         }
@@ -51,20 +47,11 @@ public class ArrayStorage {
      * @return array, contains only Resumes in storage (without null)
      */
     Resume[] getAll() {
-        if (size() > 0) {
-            return Arrays.copyOf(storage, size());
-        }
-        return new Resume[0];
+            return Arrays.copyOf(storage, size);
     }
 
     int size() {
-        int count = 0;
 
-        for (Resume res : storage) {
-            if (res != null) count++;
-            else break;
-        }
-
-        return count;
+        return size;
     }
 }
