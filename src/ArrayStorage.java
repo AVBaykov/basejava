@@ -1,11 +1,10 @@
-import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    Resume[] storage = new Resume[10000];
+    private Resume[] storage = new Resume[10000];
 
     private int size;
 
@@ -32,11 +31,8 @@ public class ArrayStorage {
         for (int i = 0; i < size; i++) {
 
             if (storage[i].uuid.equals(uuid)) {
-                storage[i] = storage[i+1];
-
-                for (int j = i+1; j < size; j++) {
-                    storage[j] = storage[j+1];
-                }
+                storage[i] = null;
+                System.arraycopy(storage, i + 1, storage, i, size - 1 - i);
                 size--;
                 break;
             }
