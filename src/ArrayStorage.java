@@ -36,6 +36,7 @@ public class ArrayStorage {
 
     public Resume get(String uuid) {
         int storageIndex = getStorageIndex(uuid);
+
         if (storageIndex < 0) {
             System.out.println("Resume doesn't exists in storage");
             return null;
