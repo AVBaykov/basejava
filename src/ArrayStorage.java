@@ -1,3 +1,4 @@
+import java.sql.SQLOutput;
 import java.util.Arrays;
 
 /**
@@ -14,29 +15,50 @@ public class ArrayStorage {
     }
 
     void save(Resume r) {
+
+        if (storage.length == size) {
+            System.out.println("Exceeded storage capacity. You must delete at least one resume");
+            return;
+        }
+
+        if (isResumePresent(r.uuid) >= 0) {
+            System.out.println("Resume already exists in base");
+            return;
+        }
+
         storage[size] = r;
         size++;
     }
 
     Resume get(String uuid) {
-        for (int i = 0; i < size; i++) {
-            if (storage[i].uuid.equals(uuid)) {
-                return storage[i];
-            }
+        int i = isResumePresent(uuid);
+        if (i < 0) {
+            System.out.println("Resume doesn't exists in storage");
+            return null;
         }
-        return null;
+        else return storage[i];
     }
 
     void delete(String uuid) {
-        for (int i = 0; i < size; i++) {
+        int i = isResumePresent(uuid);
 
+        if (i >= 0 ) {
+            System.arraycopy(storage, i + 1, storage, i, size - 1 - i);
+            storage[size - 1] = null;
+            size--;
+        } else {
+            System.out.println("Resume doesn't exists in storage");
+        }
+    }
+
+    private int isResumePresent(String uuid) {
+
+        for (int i = 0; i < size ; i++) {
             if (storage[i].uuid.equals(uuid)) {
-                System.arraycopy(storage, i + 1, storage, i, size - 1 - i);
-                storage[size-1] = null;
-                size--;
-                break;
+                return i;
             }
         }
+        return -1;
     }
 
     /**
