@@ -24,6 +24,16 @@ public class MainTestArrayStorage {
         printAll();
         ARRAY_STORAGE.delete(r1.uuid);
         printAll();
+
+        Resume r4 = new Resume();
+        r4.uuid = "uuid3";
+
+        printAll();
+        System.out.println("Before update: r4 hash = " + r4.hashCode());
+        System.out.println("Before update: r3 hash = " + ARRAY_STORAGE.get("uuid3").hashCode());
+        ARRAY_STORAGE.update(r4);
+        System.out.println("After update: r4 hash in storage = " + ARRAY_STORAGE.get("uuid3").hashCode() );
+
         ARRAY_STORAGE.clear();
         printAll();
 

@@ -1,4 +1,3 @@
-import java.sql.SQLOutput;
 import java.util.Arrays;
 
 /**
@@ -6,54 +5,49 @@ import java.util.Arrays;
  */
 public class ArrayStorage {
     private Resume[] storage = new Resume[10000];
-
     private int size;
 
-    void clear() {
+    public void clear() {
         Arrays.fill(storage, 0,size, null);
         size = 0;
     }
 
-    void save(Resume r) {
-
+    public void save(Resume resume) {
         if (storage.length == size) {
             System.out.println("Exceeded storage capacity. You must delete at least one resume");
             return;
         }
-
-        if (isResumePresent(r.uuid) >= 0) {
+        if (getStorageIndex(resume.uuid) >= 0) {
             System.out.println("Resume already exists in base");
             return;
         }
-
-        storage[size] = r;
+        storage[size] = resume;
         size++;
     }
 
-    void update(Resume r) {
-        int i = isResumePresent(r.uuid);
-
-        if (i < 0) {
+    public void update(Resume resume) {
+        int storageIndex = getStorageIndex(resume.uuid);
+        if (storageIndex < 0) {
             System.out.println("Resume doesn't exists in storage");
         } else {
-            storage[i] = r;
+            storage[storageIndex] = resume;
         }
     }
 
-    Resume get(String uuid) {
-        int i = isResumePresent(uuid);
-        if (i < 0) {
+    public Resume get(String uuid) {
+        int storageIndex = getStorageIndex(uuid);
+        if (storageIndex < 0) {
             System.out.println("Resume doesn't exists in storage");
             return null;
         }
-        else return storage[i];
+        return storage[storageIndex];
     }
 
-    void delete(String uuid) {
-        int i = isResumePresent(uuid);
+    public void delete(String uuid) {
+        int storageIndex = getStorageIndex(uuid);
 
-        if (i >= 0 ) {
-            System.arraycopy(storage, i + 1, storage, i, size - 1 - i);
+        if (storageIndex >= 0 ) {
+            storage[storageIndex] = storage[size - 1];
             storage[size - 1] = null;
             size--;
         } else {
@@ -61,8 +55,7 @@ public class ArrayStorage {
         }
     }
 
-    private int isResumePresent(String uuid) {
-
+    private int getStorageIndex(String uuid) {
         for (int i = 0; i < size ; i++) {
             if (storage[i].uuid.equals(uuid)) {
                 return i;
@@ -79,7 +72,6 @@ public class ArrayStorage {
     }
 
     int size() {
-
         return size;
     }
 }
