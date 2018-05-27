@@ -27,6 +27,7 @@ public class ArrayStorage {
 
     public void update(Resume resume) {
         int storageIndex = getStorageIndex(resume.uuid);
+
         if (storageIndex < 0) {
             System.out.println("Resume doesn't exists in storage");
         } else {
