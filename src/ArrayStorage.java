@@ -30,6 +30,16 @@ public class ArrayStorage {
         size++;
     }
 
+    void update(Resume r) {
+        int i = isResumePresent(r.uuid);
+
+        if (i < 0) {
+            System.out.println("Resume doesn't exists in storage");
+        } else {
+            storage[i] = r;
+        }
+    }
+
     Resume get(String uuid) {
         int i = isResumePresent(uuid);
         if (i < 0) {
