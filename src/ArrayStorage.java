@@ -8,7 +8,7 @@ public class ArrayStorage {
     private int size;
 
     public void clear() {
-        Arrays.fill(storage, 0,size, null);
+        Arrays.fill(storage, 0, size, null);
         size = 0;
     }
 
@@ -17,7 +17,7 @@ public class ArrayStorage {
             System.out.println("Exceeded storage capacity. You must delete at least one resume");
             return;
         }
-        if (getStorageIndex(resume.uuid) >= 0) {
+        if (getStorageIndex(resume.getUuid()) >= 0) {
             System.out.println("Resume already exists in base");
             return;
         }
@@ -26,7 +26,7 @@ public class ArrayStorage {
     }
 
     public void update(Resume resume) {
-        int storageIndex = getStorageIndex(resume.uuid);
+        int storageIndex = getStorageIndex(resume.getUuid());
 
         if (storageIndex < 0) {
             System.out.println("Resume doesn't exists in storage");
@@ -48,18 +48,18 @@ public class ArrayStorage {
     public void delete(String uuid) {
         int storageIndex = getStorageIndex(uuid);
 
-        if (storageIndex >= 0 ) {
-            storage[storageIndex] = storage[size - 1];
-            storage[size - 1] = null;
+        if (storageIndex >= 0) {
             size--;
+            storage[storageIndex] = storage[size];
+            storage[size] = null;
         } else {
             System.out.println("Resume doesn't exists in storage");
         }
     }
 
     private int getStorageIndex(String uuid) {
-        for (int i = 0; i < size ; i++) {
-            if (storage[i].uuid.equals(uuid)) {
+        for (int i = 0; i < size; i++) {
+            if (storage[i].getUuid().equals(uuid)) {
                 return i;
             }
         }
@@ -70,7 +70,7 @@ public class ArrayStorage {
      * @return array, contains only Resumes in storage (without null)
      */
     Resume[] getAll() {
-            return Arrays.copyOf(storage, size);
+        return Arrays.copyOf(storage, size);
     }
 
     int size() {
