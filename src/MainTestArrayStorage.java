@@ -27,22 +27,13 @@ public class MainTestArrayStorage {
         System.out.println("Get dummy: " + ARRAY_STORAGE.get("dummy"));
 
         printAll();
-//        ARRAY_STORAGE.delete(r1.getUuid());
-//        printAll();
-//
-//        Resume r4 = new Resume();
-//        r4.setUuid("uuid3");
-//
-//        printAll();
-//        System.out.println("Before update: r4 hash = " + r4.hashCode());
-//        System.out.println("Before update: r3 hash = " + ARRAY_STORAGE.get("uuid3").hashCode());
-//        ARRAY_STORAGE.update(r4);
-//        System.out.println("After update: r4 hash in storage = " + ARRAY_STORAGE.get("uuid3").hashCode());
-//
-//        ARRAY_STORAGE.clear();
-//        printAll();
-//
-//        System.out.println("Size: " + ARRAY_STORAGE.size());
+        ARRAY_STORAGE.delete(r1.getUuid());
+        printAll();
+
+        ARRAY_STORAGE.clear();
+        printAll();
+
+        System.out.println("Size: " + ARRAY_STORAGE.size());
     }
 
     public static void printAll() {

@@ -7,10 +7,6 @@ import java.util.Arrays;
 public class SortedArrayStorage extends AbstractArrayStorage {
 
 
-    @Override
-    public void delete(String uuid) {
-
-    }
 
     @Override
     protected int getIndex(String uuid) {
