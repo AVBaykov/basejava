@@ -21,16 +21,6 @@ public class ArrayStorage extends AbstractArrayStorage {
         size++;
     }
 
-    public Resume get(String uuid) {
-        int storageIndex = getIndex(uuid);
-
-        if (storageIndex < 0) {
-            System.out.println("model.Resume doesn't exists in storage");
-            return null;
-        }
-        return storage[storageIndex];
-    }
-
     public void delete(String uuid) {
         int storageIndex = getIndex(uuid);
 
