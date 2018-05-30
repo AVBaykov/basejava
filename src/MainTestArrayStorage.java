@@ -1,3 +1,5 @@
+import model.Resume;
+
 /**
  * Test for com.urise.webapp.storage.ArrayStorage
  */

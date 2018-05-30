@@ -1,3 +1,5 @@
+import model.Resume;
+
 import java.util.Arrays;
 
 /**
@@ -18,7 +20,7 @@ public class ArrayStorage {
             return;
         }
         if (getStorageIndex(resume.getUuid()) >= 0) {
-            System.out.println("Resume already exists in base");
+            System.out.println("model.Resume already exists in base");
             return;
         }
         storage[size] = resume;
@@ -29,7 +31,7 @@ public class ArrayStorage {
         int storageIndex = getStorageIndex(resume.getUuid());
 
         if (storageIndex < 0) {
-            System.out.println("Resume doesn't exists in storage");
+            System.out.println("model.Resume doesn't exists in storage");
         } else {
             storage[storageIndex] = resume;
         }
@@ -39,7 +41,7 @@ public class ArrayStorage {
         int storageIndex = getStorageIndex(uuid);
 
         if (storageIndex < 0) {
-            System.out.println("Resume doesn't exists in storage");
+            System.out.println("model.Resume doesn't exists in storage");
             return null;
         }
         return storage[storageIndex];
@@ -53,7 +55,7 @@ public class ArrayStorage {
             storage[storageIndex] = storage[size];
             storage[size] = null;
         } else {
-            System.out.println("Resume doesn't exists in storage");
+            System.out.println("model.Resume doesn't exists in storage");
         }
     }
 
