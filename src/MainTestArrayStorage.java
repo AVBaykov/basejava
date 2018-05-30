@@ -1,19 +1,21 @@
 import model.Resume;
+import storage.AbstractArrayStorage;
 import storage.ArrayStorage;
+import storage.SortedArrayStorage;
 
 /**
  * Test for com.urise.webapp.storage.storage.ArrayStorage
  */
 public class MainTestArrayStorage {
-    private static final ArrayStorage ARRAY_STORAGE = new ArrayStorage();
+    private static final AbstractArrayStorage ARRAY_STORAGE = new SortedArrayStorage();
 
     public static void main(String[] args) {
         Resume r1 = new Resume();
-        r1.setUuid("uuid1");
+        r1.setUuid("uuid12");
         Resume r2 = new Resume();
-        r2.setUuid("uuid2");
+        r2.setUuid("uuid1");
         Resume r3 = new Resume();
-        r3.setUuid("uuid3");
+        r3.setUuid("uuid18");
 
         ARRAY_STORAGE.save(r1);
         ARRAY_STORAGE.save(r2);
@@ -25,22 +27,22 @@ public class MainTestArrayStorage {
         System.out.println("Get dummy: " + ARRAY_STORAGE.get("dummy"));
 
         printAll();
-        ARRAY_STORAGE.delete(r1.getUuid());
-        printAll();
-
-        Resume r4 = new Resume();
-        r4.setUuid("uuid3");
-
-        printAll();
-        System.out.println("Before update: r4 hash = " + r4.hashCode());
-        System.out.println("Before update: r3 hash = " + ARRAY_STORAGE.get("uuid3").hashCode());
-        ARRAY_STORAGE.update(r4);
-        System.out.println("After update: r4 hash in storage = " + ARRAY_STORAGE.get("uuid3").hashCode());
-
-        ARRAY_STORAGE.clear();
-        printAll();
-
-        System.out.println("Size: " + ARRAY_STORAGE.size());
+//        ARRAY_STORAGE.delete(r1.getUuid());
+//        printAll();
+//
+//        Resume r4 = new Resume();
+//        r4.setUuid("uuid3");
+//
+//        printAll();
+//        System.out.println("Before update: r4 hash = " + r4.hashCode());
+//        System.out.println("Before update: r3 hash = " + ARRAY_STORAGE.get("uuid3").hashCode());
+//        ARRAY_STORAGE.update(r4);
+//        System.out.println("After update: r4 hash in storage = " + ARRAY_STORAGE.get("uuid3").hashCode());
+//
+//        ARRAY_STORAGE.clear();
+//        printAll();
+//
+//        System.out.println("Size: " + ARRAY_STORAGE.size());
     }
 
     public static void printAll() {

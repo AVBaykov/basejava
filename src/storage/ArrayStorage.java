@@ -8,19 +8,6 @@ import model.Resume;
 public class ArrayStorage extends AbstractArrayStorage {
 
 
-    public void save(Resume resume) {
-        if (storage.length == size) {
-            System.out.println("Exceeded storage capacity. You must delete at least one resume");
-            return;
-        }
-        if (getIndex(resume.getUuid()) >= 0) {
-            System.out.println("model.Resume already exists in base");
-            return;
-        }
-        storage[size] = resume;
-        size++;
-    }
-
     public void delete(String uuid) {
         int storageIndex = getIndex(uuid);
 
@@ -29,7 +16,7 @@ public class ArrayStorage extends AbstractArrayStorage {
             storage[storageIndex] = storage[size];
             storage[size] = null;
         } else {
-            System.out.println("model.Resume doesn't exists in storage");
+            System.out.println("Resume doesn't exists in storage");
         }
     }
 
@@ -40,6 +27,11 @@ public class ArrayStorage extends AbstractArrayStorage {
             }
         }
         return -1;
+    }
+
+    @Override
+    protected void insert(Resume resume) {
+        storage[size] = resume;
     }
 
 }
