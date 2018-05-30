@@ -2,8 +2,6 @@ package storage;
 
 import model.Resume;
 
-import java.util.Arrays;
-
 /**
  * Array based storage for Resumes
  */
@@ -15,7 +13,7 @@ public class ArrayStorage extends AbstractArrayStorage {
             System.out.println("Exceeded storage capacity. You must delete at least one resume");
             return;
         }
-        if (getStorageIndex(resume.getUuid()) >= 0) {
+        if (getIndex(resume.getUuid()) >= 0) {
             System.out.println("model.Resume already exists in base");
             return;
         }
@@ -24,17 +22,18 @@ public class ArrayStorage extends AbstractArrayStorage {
     }
 
     public void update(Resume resume) {
-        int storageIndex = getStorageIndex(resume.getUuid());
+        int storageIndex = getIndex(resume.getUuid());
 
         if (storageIndex < 0) {
             System.out.println("model.Resume doesn't exists in storage");
         } else {
             storage[storageIndex] = resume;
+
         }
     }
 
     public Resume get(String uuid) {
-        int storageIndex = getStorageIndex(uuid);
+        int storageIndex = getIndex(uuid);
 
         if (storageIndex < 0) {
             System.out.println("model.Resume doesn't exists in storage");
@@ -44,7 +43,7 @@ public class ArrayStorage extends AbstractArrayStorage {
     }
 
     public void delete(String uuid) {
-        int storageIndex = getStorageIndex(uuid);
+        int storageIndex = getIndex(uuid);
 
         if (storageIndex >= 0) {
             size--;
@@ -55,7 +54,7 @@ public class ArrayStorage extends AbstractArrayStorage {
         }
     }
 
-    protected int getStorageIndex(String uuid) {
+    protected int getIndex(String uuid) {
         for (int i = 0; i < size; i++) {
             if (storage[i].getUuid().equals(uuid)) {
                 return i;
