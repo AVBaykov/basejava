@@ -6,9 +6,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-/**
- * Test for com.urise.webapp.storage.storage.ArrayStorage
- */
+
 public class MainArray {
     private final static AbstractArrayStorage ARRAY_STORAGE = new SortedArrayStorage();
 
@@ -65,8 +63,8 @@ public class MainArray {
         if (all.length == 0) {
             System.out.println("Empty");
         } else {
-            for (Resume r : all) {
-                System.out.println(r);
+            for (Resume resume : all) {
+                System.out.println(resume);
             }
         }
         System.out.println("----------------------------");

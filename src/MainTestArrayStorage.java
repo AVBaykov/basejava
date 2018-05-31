@@ -1,11 +1,8 @@
 import model.Resume;
 import storage.AbstractArrayStorage;
 import storage.ArrayStorage;
-import storage.SortedArrayStorage;
 
-/**
- * Test for com.urise.webapp.storage.storage.ArrayStorage
- */
+
 public class MainTestArrayStorage {
     private static final AbstractArrayStorage ARRAY_STORAGE = new ArrayStorage();
 
@@ -49,8 +46,8 @@ public class MainTestArrayStorage {
 
     public static void printAll() {
         System.out.println("\nGet All");
-        for (Resume r : ARRAY_STORAGE.getAll()) {
-            System.out.println(r);
+        for (Resume resume : ARRAY_STORAGE.getAll()) {
+            System.out.println(resume);
         }
     }
 }
