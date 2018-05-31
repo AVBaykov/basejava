@@ -19,21 +19,20 @@ public abstract class AbstractArrayStorage implements Storage {
     @Override
     public void update(Resume resume) {
         int storageIndex = getIndex(resume.getUuid());
-
         if (storageIndex < 0) {
-            System.out.println("Resume doesn't exists in storage");
+            System.out.println("Resume with uuid = " + resume.getUuid() + " doesn't exists in storage");
         } else {
             storage[storageIndex] = resume;
+            System.out.println("Resume with uuid = " + resume.getUuid() + " updated successfully");
         }
     }
 
     public void save(Resume resume) {
-        if (storage.length == size) {
-            System.out.println("Exceeded storage capacity. You must delete at least one resume");
-            return;
-        }
         if (getIndex(resume.getUuid()) >= 0) {
-            System.out.println("Resume already exists in base");
+            System.out.println("Resume with uuid = " + resume.getUuid() + " already exists in base");
+            return;
+        } else if (storage.length == size) {
+            System.out.println("Exceeded storage capacity. You must delete at least one resume");
             return;
         }
         insert(resume);
@@ -44,7 +43,7 @@ public abstract class AbstractArrayStorage implements Storage {
     public Resume get(String uuid) {
         int index = getIndex(uuid);
         if (index < 0) {
-            System.out.println("Resume doesn't exists in storage");
+            System.out.println("Resume with uuid = " + uuid + " doesn't exists in storage");
             return null;
         }
         return storage[index];
@@ -53,11 +52,10 @@ public abstract class AbstractArrayStorage implements Storage {
     @Override
     public void delete(String uuid) {
         int index = getIndex(uuid);
-
         if (index < 0) {
-            System.out.println("Resume doesn't exists in storage");
+            System.out.println("Resume with uuid = " + uuid + " doesn't exists in storage");
         } else {
-            System.arraycopy(storage, index + 1, storage, index, size -1 -index );
+            remove(index);
             size--;
         }
     }
@@ -75,4 +73,6 @@ public abstract class AbstractArrayStorage implements Storage {
     protected abstract int getIndex(String uuid);
 
     protected abstract void insert(Resume resume);
+
+    protected abstract void remove(int index);
 }

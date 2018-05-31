@@ -7,7 +7,7 @@ import storage.SortedArrayStorage;
  * Test for com.urise.webapp.storage.storage.ArrayStorage
  */
 public class MainTestArrayStorage {
-    private static final AbstractArrayStorage ARRAY_STORAGE = new SortedArrayStorage();
+    private static final AbstractArrayStorage ARRAY_STORAGE = new ArrayStorage();
 
     public static void main(String[] args) {
         Resume r1 = new Resume();
@@ -28,6 +28,17 @@ public class MainTestArrayStorage {
 
         printAll();
         ARRAY_STORAGE.delete(r1.getUuid());
+        printAll();
+
+        printAll();
+        Resume r4 = new Resume();
+        r4.setUuid("brokenUuid");
+        ARRAY_STORAGE.update(r4);
+        printAll();
+
+        Resume r5 = new Resume();
+        r5.setUuid("uuid18");
+        ARRAY_STORAGE.update(r5);
         printAll();
 
         ARRAY_STORAGE.clear();
