@@ -32,7 +32,8 @@ public abstract class AbstractArrayStorage implements Storage {
         if (index >= 0) {
             System.out.println("Resume with uuid = " + resume.getUuid() + " already exists in base");
             return;
-        } else if (storage.length == size) {
+        }
+        if (storage.length == size) {
             System.out.println("Exceeded storage capacity. You must delete at least one resume");
             return;
         }
@@ -58,6 +59,7 @@ public abstract class AbstractArrayStorage implements Storage {
         } else {
             size--;
             remove(index);
+            storage[size] = null;
         }
     }
 
