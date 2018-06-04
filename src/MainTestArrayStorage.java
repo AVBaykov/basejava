@@ -7,12 +7,9 @@ public class MainTestArrayStorage {
     private static final AbstractArrayStorage ARRAY_STORAGE = new ArrayStorage();
 
     public static void main(String[] args) {
-        Resume r1 = new Resume();
-        r1.setUuid("uuid12");
-        Resume r2 = new Resume();
-        r2.setUuid("uuid1");
-        Resume r3 = new Resume();
-        r3.setUuid("uuid18");
+        Resume r1 = new Resume("uuid12");
+        Resume r2 = new Resume("uuid1");
+        Resume r3 = new Resume("uuid18");
 
         ARRAY_STORAGE.save(r1);
         ARRAY_STORAGE.save(r2);
@@ -28,13 +25,11 @@ public class MainTestArrayStorage {
         printAll();
 
         printAll();
-        Resume r4 = new Resume();
-        r4.setUuid("brokenUuid");
+        Resume r4 = new Resume("badUuid");
         ARRAY_STORAGE.update(r4);
         printAll();
 
-        Resume r5 = new Resume();
-        r5.setUuid("uuid18");
+        Resume r5 = new Resume("uuid18");
         ARRAY_STORAGE.update(r5);
         printAll();
 
