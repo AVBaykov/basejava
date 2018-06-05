@@ -2,6 +2,7 @@ package storage;
 
 import exception.ExistStorageException;
 import exception.NotExistStorageException;
+import exception.StorageException;
 import model.Resume;
 
 import java.util.Arrays;
@@ -33,9 +34,8 @@ public abstract class AbstractArrayStorage implements Storage {
         if (index >= 0) {
             throw new ExistStorageException(resume.getUuid());
         }
-        if (storage.length == size) {
-            System.out.println("Exceeded storage capacity. You must delete at least one resume");
-            return;
+        if (size == STORAGE_LIMIT) {
+            throw new StorageException("Storage overflow", resume.getUuid());
         }
         insert(resume, index);
         size++;
