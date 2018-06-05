@@ -1,6 +1,8 @@
-import model.Resume;
-import storage.AbstractArrayStorage;
-import storage.ArrayStorage;
+package ru.javawebinar.basejava;
+
+import ru.javawebinar.basejava.model.Resume;
+import ru.javawebinar.basejava.storage.AbstractArrayStorage;
+import ru.javawebinar.basejava.storage.ArrayStorage;
 
 
 public class MainTestArrayStorage {

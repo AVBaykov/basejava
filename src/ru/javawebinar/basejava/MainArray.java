@@ -1,6 +1,8 @@
-import model.Resume;
-import storage.AbstractArrayStorage;
-import storage.SortedArrayStorage;
+package ru.javawebinar.basejava;
+
+import ru.javawebinar.basejava.model.Resume;
+import ru.javawebinar.basejava.storage.AbstractArrayStorage;
+import ru.javawebinar.basejava.storage.SortedArrayStorage;
 
 import java.io.BufferedReader;
 import java.io.IOException;
