@@ -15,27 +15,30 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected Resume getResumeByIndex(int index) {
-        return storage.get(index);
+    protected boolean isResumePresent(Object key) {
+        return (Integer) key >= 0;
     }
 
     @Override
-    protected void deleteResume(int index) {
+    protected Resume getResume(Object key) {
+        return storage.get((Integer) key);
+    }
+
+    @Override
+    protected void deleteResume(Object key) {
+        int index = (Integer) key;
         storage.remove(index);
-        if (storage instanceof ArrayList) {
-            ((ArrayList<Resume>) storage).trimToSize();
-        }
+        ((ArrayList<Resume>) storage).trimToSize();
     }
 
     @Override
-    protected void saveResume(Resume resume, int index) {
+    protected void saveResume(Object key, Resume resume) {
         storage.add(resume);
     }
 
     @Override
     public Resume[] getAll() {
-        Resume[] resumes = new Resume[storage.size()];
-        return storage.toArray(resumes);
+        return storage.toArray(new Resume[0]);
     }
 
     @Override
@@ -44,19 +47,15 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected int getIndex(String uuid) {
-        Resume resume = new Resume(uuid);
-        return storage.indexOf(resume);
-    }
-
-
-    @Override
-    protected boolean isOverflow() {
-        return size() == STORAGE_LIMIT;
+    protected Object getKey(String uuid) {
+        for (Resume resume : storage) {
+            if (resume.getUuid().equals(uuid)) return storage.indexOf(resume);
+        }
+        return -1;
     }
 
     @Override
-    protected void rewrite(Resume resume, int index) {
-        storage.set(index, resume);
+    protected void rewrite(Object key, Resume resume) {
+        storage.set((Integer) key, resume);
     }
 }

@@ -5,32 +5,32 @@ import ru.javawebinar.basejava.model.Resume;
 public class MapStorage extends AbstractStorage {
 
     @Override
-    protected Resume getResumeByIndex(int index) {
-        return null;
-    }
-
-    @Override
-    protected void deleteResume(int index) {
-
-    }
-
-    @Override
-    protected void saveResume(Resume resume, int index) {
-
-    }
-
-    @Override
-    protected int getIndex(String uuid) {
-        return 0;
-    }
-
-    @Override
-    protected boolean isOverflow() {
+    protected boolean isResumePresent(Object key) {
         return false;
     }
 
     @Override
-    protected void rewrite(Resume resume, int index) {
+    protected Resume getResume(Object key) {
+        return null;
+    }
+
+    @Override
+    protected void deleteResume(Object key) {
+
+    }
+
+    @Override
+    protected void saveResume(Object key, Resume resume) {
+
+    }
+
+    @Override
+    protected Object getKey(String uuid) {
+        return null;
+    }
+
+    @Override
+    protected void rewrite(Object key, Resume resume) {
 
     }
 
