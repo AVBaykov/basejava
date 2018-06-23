@@ -16,12 +16,12 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     protected boolean isResumePresent(Object key) {
-        return (Integer) key >= 0;
+        return (int) key >= 0;
     }
 
     @Override
     protected Resume getResume(Object key) {
-        return storage.get((Integer) key);
+        return storage.get((int) key);
     }
 
     @Override
@@ -57,6 +57,6 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     protected void rewrite(Object key, Resume resume) {
-        storage.set((Integer) key, resume);
+        storage.set((int) key, resume);
     }
 }
