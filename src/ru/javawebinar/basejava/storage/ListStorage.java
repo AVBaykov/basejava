@@ -3,6 +3,8 @@ package ru.javawebinar.basejava.storage;
 import ru.javawebinar.basejava.model.Resume;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class ListStorage extends AbstractStorage {
@@ -48,10 +50,7 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     protected Object getKey(String uuid) {
-        for (Resume resume : storage) {
-            if (resume.getUuid().equals(uuid)) return storage.indexOf(resume);
-        }
-        return -1;
+       return Collections.binarySearch(storage, new Resume(uuid), Comparator.comparing(Resume::getUuid));
     }
 
     @Override

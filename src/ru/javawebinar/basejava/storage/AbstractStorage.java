@@ -9,40 +9,36 @@ public abstract class AbstractStorage implements Storage {
 
     @Override
     public void update(Resume resume) {
-        String uuid = resume.getUuid();
-        Object key = getKey(uuid);
-        notExistStorageExceptionThrower(key, uuid);
+        Object key = getKeyOrNotExistException(resume.getUuid());
         rewrite(key, resume);
     }
 
     @Override
     public void save(Resume resume) {
-        String uuid = resume.getUuid();
-        Object key = getKey(uuid);
-        existStorageExceptionThrower(key, uuid);
+        Object key = getKeyOrExistException(resume.getUuid());
         saveResume(key, resume);
     }
 
     @Override
     public Resume get(String uuid) {
-        Object key = getKey(uuid);
-        notExistStorageExceptionThrower(key, uuid);
+        Object key = getKeyOrNotExistException(uuid);
         return getResume(key);
     }
 
     @Override
     public void delete(String uuid) {
-        Object key = getKey(uuid);
-        notExistStorageExceptionThrower(key, uuid);
+        Object key = getKeyOrNotExistException(uuid);
         deleteResume(key);
     }
 
-    private void notExistStorageExceptionThrower(Object key, String uuid) {
-        if (!isResumePresent(key)) throw new NotExistStorageException(uuid);
+    private Object getKeyOrNotExistException(String uuid) {
+        if (!isResumePresent(getKey(uuid))) throw new NotExistStorageException(uuid);
+        return getKey(uuid);
     }
 
-    protected void existStorageExceptionThrower(Object key, String uuid) {
-        if (isResumePresent(key)) throw new ExistStorageException(uuid);
+    protected Object getKeyOrExistException(String uuid) {
+        if (isResumePresent(getKey(uuid))) throw new ExistStorageException(uuid);
+        return getKey(uuid);
     }
 
     protected abstract boolean isResumePresent(Object key);
