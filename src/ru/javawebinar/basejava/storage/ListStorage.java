@@ -3,8 +3,6 @@ package ru.javawebinar.basejava.storage;
 import ru.javawebinar.basejava.model.Resume;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class ListStorage extends AbstractStorage {
@@ -28,8 +26,7 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     protected void deleteResume(Object key) {
-        int index = (Integer) key;
-        storage.remove(index);
+        storage.remove((int) key);
         ((ArrayList<Resume>) storage).trimToSize();
     }
 
@@ -50,7 +47,12 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     protected Object getKey(String uuid) {
-       return Collections.binarySearch(storage, new Resume(uuid), Comparator.comparing(Resume::getUuid));
+        for (int i = 0; i < storage.size(); i++) {
+            if (storage.get(i).getUuid().equals(uuid)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     @Override

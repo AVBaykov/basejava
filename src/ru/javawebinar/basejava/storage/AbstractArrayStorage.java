@@ -1,5 +1,6 @@
 package ru.javawebinar.basejava.storage;
 
+import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
 
@@ -41,9 +42,14 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected Object getKeyOrExistException(String uuid) {
-        if (size == STORAGE_LIMIT) throw new StorageException("Storage overflow", uuid);
-        return super.getKeyOrExistException(uuid);
+    protected Object checkForExist(String uuid) {
+        if (isResumePresent(getKey(uuid))) {
+            throw new ExistStorageException(uuid);
+        }
+        if (size == STORAGE_LIMIT) {
+            throw new StorageException("Storage overflow", uuid);
+        }
+        return getKey(uuid);
     }
 
     @Override
