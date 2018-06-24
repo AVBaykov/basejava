@@ -6,7 +6,7 @@ import ru.javawebinar.basejava.model.Resume;
 import java.util.Arrays;
 
 public abstract class AbstractArrayStorage extends AbstractStorage {
-    private static final int STORAGE_LIMIT = 10000;
+    static final int STORAGE_LIMIT = 10000;
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size;
 
@@ -36,16 +36,16 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected boolean isResumePresent(Object key) {
-        return (int) key >= 0;
+    protected boolean isPresent(Object key) {
+        return (int) key > -1;
     }
 
     @Override
-    protected Object checkForExist(String uuid) {
+    protected Object getIfNotExist(String uuid) {
         if (size == STORAGE_LIMIT) {
             throw new StorageException("Storage overflow", uuid);
         }
-        return super.checkForExist(uuid);
+        return super.getIfNotExist(uuid);
     }
 
     @Override

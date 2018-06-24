@@ -5,7 +5,7 @@ import ru.javawebinar.basejava.model.Resume;
 public class MapStorage extends AbstractStorage {
 
     @Override
-    protected boolean isResumePresent(Object key) {
+    protected boolean isPresent(Object key) {
         return false;
     }
 

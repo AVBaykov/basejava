@@ -8,44 +8,44 @@ public abstract class AbstractStorage implements Storage {
 
 
     @Override
-    public void update(Resume resume) {
-        Object key = checkForNotExist(resume.getUuid());
+    public final void update(Resume resume) {
+        Object key = getIfExist(resume.getUuid());
         rewrite(key, resume);
     }
 
     @Override
-    public void save(Resume resume) {
-        Object key = checkForExist(resume.getUuid());
+    public final void save(Resume resume) {
+        Object key = getIfNotExist(resume.getUuid());
         saveResume(key, resume);
     }
 
     @Override
-    public Resume get(String uuid) {
-        Object key = checkForNotExist(uuid);
+    public final Resume get(String uuid) {
+        Object key = getIfExist(uuid);
         return getResume(key);
     }
 
     @Override
-    public void delete(String uuid) {
-        Object key = checkForNotExist(uuid);
+    public final void delete(String uuid) {
+        Object key = getIfExist(uuid);
         deleteResume(key);
     }
 
-    private Object checkForNotExist(String uuid) {
-        if (!isResumePresent(getKey(uuid))) {
+    private Object getIfExist(String uuid) {
+        if (!isPresent(getKey(uuid))) {
             throw new NotExistStorageException(uuid);
         }
         return getKey(uuid);
     }
 
-    protected Object checkForExist(String uuid) {
-        if (isResumePresent(getKey(uuid))) {
+    protected Object getIfNotExist(String uuid) {
+        if (isPresent(getKey(uuid))) {
             throw new ExistStorageException(uuid);
         }
         return getKey(uuid);
     }
 
-    protected abstract boolean isResumePresent(Object key);
+    protected abstract boolean isPresent(Object key);
 
     protected abstract Resume getResume(Object key);
 
