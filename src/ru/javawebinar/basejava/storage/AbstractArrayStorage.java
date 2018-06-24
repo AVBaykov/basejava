@@ -23,14 +23,17 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected void deleteResume(Object key) {
+    protected final void deleteResume(Object key) {
         size--;
         remove((int) key);
         storage[size] = null;
     }
 
     @Override
-    protected void saveResume(Object key, Resume resume) {
+    protected final void saveResume(Object key, Resume resume) {
+        if (size == STORAGE_LIMIT) {
+            throw new StorageException("Storage overflow", resume.getUuid());
+        }
         insert((int) key, resume);
         size++;
     }
@@ -38,14 +41,6 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     @Override
     protected boolean isPresent(Object key) {
         return (int) key > -1;
-    }
-
-    @Override
-    protected Object getIfNotExist(String uuid) {
-        if (size == STORAGE_LIMIT) {
-            throw new StorageException("Storage overflow", uuid);
-        }
-        return super.getIfNotExist(uuid);
     }
 
     @Override
