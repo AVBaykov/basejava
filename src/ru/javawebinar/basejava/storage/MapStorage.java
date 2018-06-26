@@ -10,17 +10,17 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    protected Resume getResume(Object key) {
+    protected Resume doGet(Object key) {
         return null;
     }
 
     @Override
-    protected void deleteResume(Object key) {
+    protected void doDelete(Object key) {
 
     }
 
     @Override
-    protected void saveResume(Object key, Resume resume) {
+    protected void doSave(Object key, Resume resume) {
 
     }
 
@@ -30,7 +30,7 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    protected void rewrite(Object key, Resume resume) {
+    protected void doUpdate(Object key, Resume resume) {
 
     }
 
