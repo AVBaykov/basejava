@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 public class MapUuidStorage extends AbstractStorage {
-
     private Map<String, Resume> map = new HashMap<>();
 
     @Override
