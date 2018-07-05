@@ -26,17 +26,17 @@ public class MapUuidStorage extends AbstractStorage {
     }
 
     @Override
-    protected void doSave(Object key, Resume resume) {
-
-    }
-
-    @Override
     protected Resume doGet(Object key) {
         return null;
     }
 
     @Override
     protected void doDelete(Object key) {
+
+    }
+
+    @Override
+    protected void doSave(Object key, Resume resume) {
 
     }
 
