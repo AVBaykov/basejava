@@ -49,17 +49,17 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
+    public void clear() {
+        Arrays.fill(storage, 0, size, null);
+        size = 0;
+    }
+
+    @Override
     public List<Resume> getAllSorted() {
         return Arrays.stream(Arrays.copyOf(storage, size))
                 .sorted(Comparator.comparing(Resume::getFullName)
                         .thenComparing(Resume::getUuid))
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public void clear() {
-        Arrays.fill(storage, 0, size, null);
-        size = 0;
     }
 
     @Override
