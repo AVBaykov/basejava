@@ -13,11 +13,27 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size;
 
+    protected abstract void insert(int key, Resume resume);
+
+    protected abstract void remove(int key);
 
     @Override
-    public void clear() {
-        Arrays.fill(storage, 0, size, null);
-        size = 0;
+    protected void doUpdate(Object key, Resume resume) {
+        storage[(int) key] = resume;
+    }
+
+    @Override
+    protected boolean isExists(Object key) {
+        return (int) key > -1;
+    }
+
+    @Override
+    protected final void doSave(Object key, Resume resume) {
+        if (size == STORAGE_LIMIT) {
+            throw new StorageException("Storage overflow", resume.getUuid());
+        }
+        insert((int) key, resume);
+        size++;
     }
 
     @Override
@@ -33,25 +49,6 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected final void doSave(Object key, Resume resume) {
-        if (size == STORAGE_LIMIT) {
-            throw new StorageException("Storage overflow", resume.getUuid());
-        }
-        insert((int) key, resume);
-        size++;
-    }
-
-    @Override
-    protected boolean isExists(Object key) {
-        return (int) key > -1;
-    }
-
-    @Override
-    protected void doUpdate(Object key, Resume resume) {
-        storage[(int) key] = resume;
-    }
-
-    @Override
     public List<Resume> getAllSorted() {
         return Arrays.stream(Arrays.copyOf(storage, size))
                 .sorted(Comparator.comparing(Resume::getFullName)
@@ -60,11 +57,13 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
+    public void clear() {
+        Arrays.fill(storage, 0, size, null);
+        size = 0;
+    }
+
+    @Override
     public int size() {
         return size;
     }
-
-    protected abstract void insert(int key, Resume resume);
-
-    protected abstract void remove(int key);
 }
