@@ -2,7 +2,11 @@ package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.model.Resume;
 
-public class MapStorage extends AbstractStorage {
+import java.util.HashMap;
+import java.util.Map;
+
+public class MapUuidStorage extends AbstractStorage {
+    private Map<String, Resume> map = new HashMap<>();
 
     @Override
     protected boolean isPresent(Object key) {
