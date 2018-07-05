@@ -13,13 +13,17 @@ public abstract class AbstractStorageTest {
     Storage storage;
 
     private static final String UUID_1 = "uuid1";
+    private static final String NAME_1 = "D";
     private static final String UUID_2 = "uuid2";
+    private static final String NAME_2 = "C";
     private static final String UUID_3 = "uuid3";
+    private static final String NAME_3 = "B";
     private static final String UUID_4 = "uuid4";
-    private final Resume resume1 = new Resume(UUID_1);
-    private final Resume resume2 = new Resume(UUID_2);
-    private final Resume resume3 = new Resume(UUID_3);
-    private final Resume resume4 = new Resume(UUID_4);
+    private static final String NAME_4 = "A";
+    private final Resume resume1 = new Resume(UUID_1, NAME_1);
+    private final Resume resume2 = new Resume(UUID_2, NAME_2);
+    private final Resume resume3 = new Resume(UUID_3, NAME_3);
+    private final Resume resume4 = new Resume(UUID_4, NAME_4);
 
     AbstractStorageTest(Storage storage) {
         this.storage = storage;
@@ -28,9 +32,9 @@ public abstract class AbstractStorageTest {
     @Before
     public void setUp() {
         storage.clear();
-        storage.save(new Resume(UUID_1));
-        storage.save(new Resume(UUID_2));
-        storage.save(new Resume(UUID_3));
+        storage.save(new Resume(UUID_1, NAME_1));
+        storage.save(new Resume(UUID_2, NAME_2));
+        storage.save(new Resume(UUID_3, NAME_3));
     }
 
     @Test
@@ -68,10 +72,10 @@ public abstract class AbstractStorageTest {
     }
 
     @Test
-    public void getAll() {
-        Resume[] actual = {resume1, resume2, resume3};
+    public void getAllSorted() {
+        Resume[] actual = {resume3, resume2, resume1};
 
-        assertArrayEquals(actual, storage.getAll());
+        assertArrayEquals(actual, storage.getAllSorted().toArray());
     }
 
     @Test(expected = NotExistStorageException.class)
