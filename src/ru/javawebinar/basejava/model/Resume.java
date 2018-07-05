@@ -4,17 +4,28 @@ import java.util.Objects;
 import java.util.UUID;
 
 
-public class Resume{
+public class Resume {
 
     // Unique identifier
     private final String uuid;
 
-    public Resume() {
-        this(UUID.randomUUID().toString());
+    private String fullName;
+
+    public String getFullName() {
+        return fullName;
     }
 
-    public Resume(String uuid) {
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public Resume() {
+        this(UUID.randomUUID().toString(), "John Doe");
+    }
+
+    public Resume(String uuid, String fullName) {
         this.uuid = uuid;
+        this.fullName = fullName;
     }
 
     public String getUuid() {
