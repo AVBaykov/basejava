@@ -7,12 +7,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 public class MapStorage extends AbstractStorage {
-
     private Map<String, Resume> map = new HashMap<>();
-
-    private String getUuidFromKey(Resume resume) {
-        return resume.getUuid();
-    }
 
     @Override
     protected Resume getKey(String uuid) {
@@ -21,7 +16,7 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     protected void doUpdate(Object key, Resume resume) {
-        map.put(getUuidFromKey((Resume) key), resume);
+        map.put(resume.getUuid(), resume);
     }
 
     @Override
@@ -36,12 +31,12 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     protected Resume doGet(Object key) {
-        return map.get(getUuidFromKey((Resume) key));
+        return map.get(((Resume) key).getUuid());
     }
 
     @Override
     protected void doDelete(Object key) {
-        map.remove(getUuidFromKey((Resume) key));
+        map.remove(((Resume) key).getUuid());
     }
 
     @Override
