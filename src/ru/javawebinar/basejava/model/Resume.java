@@ -6,7 +6,6 @@ import java.util.UUID;
 
 public class Resume {
 
-    // Unique identifier
     private final String uuid;
 
     private String fullName;
