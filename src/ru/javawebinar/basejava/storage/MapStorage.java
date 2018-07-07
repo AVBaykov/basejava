@@ -8,36 +8,40 @@ import java.util.stream.Stream;
 
 public class MapStorage extends AbstractStorage {
 
-    private Map<Integer, Resume> map = new HashMap<>();
+    private Map<String, Resume> map = new HashMap<>();
+
+    private String getUuidFromKey(Resume resume) {
+        return resume.getUuid();
+    }
 
     @Override
-    protected Integer getKey(String uuid) {
-        return uuid.hashCode();
+    protected Resume getKey(String uuid) {
+        return new Resume(uuid, "John Doe");
     }
 
     @Override
     protected void doUpdate(Object key, Resume resume) {
-        map.put((Integer) key, resume);
+        map.put(getUuidFromKey((Resume) key), resume);
     }
 
     @Override
     protected boolean isExists(Object key) {
-        return map.containsKey(key);
+        return map.containsKey(getUuidFromKey((Resume) key));
     }
 
     @Override
     protected void doSave(Object key, Resume resume) {
-        map.put((Integer) key, resume);
+        map.put(getUuidFromKey((Resume) key), resume);
     }
 
     @Override
     protected Resume doGet(Object key) {
-        return map.get(key);
+        return map.get(getUuidFromKey((Resume) key));
     }
 
     @Override
     protected void doDelete(Object key) {
-        map.remove(key);
+        map.remove(getUuidFromKey((Resume) key));
     }
 
     @Override
