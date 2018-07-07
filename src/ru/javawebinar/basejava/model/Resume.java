@@ -5,9 +5,7 @@ import java.util.UUID;
 
 
 public class Resume {
-
     private final String uuid;
-
     private String fullName;
 
     public Resume(String fullName) {
