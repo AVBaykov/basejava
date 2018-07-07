@@ -4,9 +4,7 @@ import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
 
 import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public abstract class AbstractArrayStorage extends AbstractStorage {
     static final int STORAGE_LIMIT = 10000;
@@ -49,17 +47,14 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    public void clear() {
-        Arrays.fill(storage, 0, size, null);
-        size = 0;
+    public Stream<Resume> getStreamForSort() {
+        return Arrays.stream(Arrays.copyOf(storage, size));
     }
 
     @Override
-    public List<Resume> getAllSorted() {
-        return Arrays.stream(Arrays.copyOf(storage, size))
-                .sorted(Comparator.comparing(Resume::getFullName)
-                        .thenComparing(Resume::getUuid))
-                .collect(Collectors.toList());
+    public void clear() {
+        Arrays.fill(storage, 0, size, null);
+        size = 0;
     }
 
     @Override

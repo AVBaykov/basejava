@@ -2,11 +2,9 @@ package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.model.Resume;
 
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class MapUuidStorage extends AbstractStorage {
 
@@ -43,15 +41,13 @@ public class MapUuidStorage extends AbstractStorage {
     }
 
     @Override
-    public void clear() {
-        map.clear();
+    public Stream<Resume> getStreamForSort() {
+        return map.values().stream();
     }
 
     @Override
-    public List<Resume> getAllSorted() {
-        return map.values().stream()
-                .sorted(Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid))
-                .collect(Collectors.toList());
+    public void clear() {
+        map.clear();
     }
 
     @Override

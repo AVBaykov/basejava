@@ -3,9 +3,8 @@ package ru.javawebinar.basejava.storage;
 import ru.javawebinar.basejava.model.Resume;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ListStorage extends AbstractStorage {
 
@@ -48,15 +47,13 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    public void clear() {
-        storage.clear();
+    public Stream<Resume> getStreamForSort() {
+        return storage.stream();
     }
 
     @Override
-    public List<Resume> getAllSorted() {
-        return storage.stream()
-                .sorted(Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid))
-                .collect(Collectors.toList());
+    public void clear() {
+        storage.clear();
     }
 
     @Override
