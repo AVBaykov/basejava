@@ -19,8 +19,8 @@ public class Resume {
         this.fullName = fullName;
     }
 
-    public Resume() {
-        this(UUID.randomUUID().toString(), "John Doe");
+    public Resume(String fullName) {
+        this(UUID.randomUUID().toString(), fullName);
     }
 
     public Resume(String uuid, String fullName) {
