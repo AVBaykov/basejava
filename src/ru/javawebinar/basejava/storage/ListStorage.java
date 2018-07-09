@@ -43,7 +43,6 @@ public class ListStorage extends AbstractStorage<Integer> {
     @Override
     protected void doDelete(Integer key) {
         storage.remove((int) key);
-        ((ArrayList<Resume>) storage).trimToSize();
     }
 
     @Override
