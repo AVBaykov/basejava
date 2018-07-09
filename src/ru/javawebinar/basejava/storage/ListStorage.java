@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class ListStorage extends AbstractStorage {
+public class ListStorage extends AbstractStorage<Integer> {
 
     private List<Resume> storage = new ArrayList<>();
 
@@ -21,27 +21,27 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected void doUpdate(Object key, Resume resume) {
-        storage.set((int) key, resume);
+    protected void doUpdate(Integer key, Resume resume) {
+        storage.set(key, resume);
     }
 
     @Override
-    protected boolean isExists(Object key) {
-        return (int) key > -1;
+    protected boolean isExists(Integer key) {
+        return key > -1;
     }
 
     @Override
-    protected void doSave(Object key, Resume resume) {
+    protected void doSave(Integer key, Resume resume) {
         storage.add(resume);
     }
 
     @Override
-    protected Resume doGet(Object key) {
-        return storage.get((int) key);
+    protected Resume doGet(Integer key) {
+        return storage.get(key);
     }
 
     @Override
-    protected void doDelete(Object key) {
+    protected void doDelete(Integer key) {
         storage.remove((int) key);
         ((ArrayList<Resume>) storage).trimToSize();
     }

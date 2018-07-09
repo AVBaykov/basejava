@@ -9,54 +9,54 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public abstract class AbstractStorage implements Storage {
+public abstract class AbstractStorage<SK> implements Storage {
 
-    protected abstract Object getKey(String uuid);
+    protected abstract SK getKey(String uuid);
 
-    protected abstract void doUpdate(Object key, Resume resume);
+    protected abstract void doUpdate(SK key, Resume resume);
 
-    protected abstract boolean isExists(Object key);
+    protected abstract boolean isExists(SK key);
 
-    protected abstract void doSave(Object key, Resume resume);
+    protected abstract void doSave(SK key, Resume resume);
 
-    protected abstract Resume doGet(Object key);
+    protected abstract Resume doGet(SK key);
 
-    protected abstract void doDelete(Object key);
+    protected abstract void doDelete(SK key);
 
     abstract Stream<Resume> getStreamForSort();
 
     @Override
     public final void update(Resume resume) {
-        Object key = getIfExist(resume.getUuid());
+        SK key = getIfExist(resume.getUuid());
         doUpdate(key, resume);
     }
 
     @Override
     public final void save(Resume resume) {
-        Object key = getIfNotExist(resume.getUuid());
+        SK key = getIfNotExist(resume.getUuid());
         doSave(key, resume);
     }
 
     @Override
     public final Resume get(String uuid) {
-        Object key = getIfExist(uuid);
+        SK key = getIfExist(uuid);
         return doGet(key);
     }
 
     @Override
     public final void delete(String uuid) {
-        Object key = getIfExist(uuid);
+        SK key = getIfExist(uuid);
         doDelete(key);
     }
 
-    private Object getIfExist(String uuid) {
+    private SK getIfExist(String uuid) {
         if (!isExists(getKey(uuid))) {
             throw new NotExistStorageException(uuid);
         }
         return getKey(uuid);
     }
 
-    private Object getIfNotExist(String uuid) {
+    private SK getIfNotExist(String uuid) {
         if (isExists(getKey(uuid))) {
             throw new ExistStorageException(uuid);
         }

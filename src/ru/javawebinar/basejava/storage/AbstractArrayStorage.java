@@ -6,7 +6,7 @@ import ru.javawebinar.basejava.model.Resume;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
-public abstract class AbstractArrayStorage extends AbstractStorage {
+public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     static final int STORAGE_LIMIT = 10000;
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size;
@@ -16,33 +16,33 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     protected abstract void remove(int key);
 
     @Override
-    protected void doUpdate(Object key, Resume resume) {
-        storage[(int) key] = resume;
+    protected void doUpdate(Integer key, Resume resume) {
+        storage[key] = resume;
     }
 
     @Override
-    protected boolean isExists(Object key) {
-        return (int) key > -1;
+    protected boolean isExists(Integer key) {
+        return key > -1;
     }
 
     @Override
-    protected final void doSave(Object key, Resume resume) {
+    protected final void doSave(Integer key, Resume resume) {
         if (size == STORAGE_LIMIT) {
             throw new StorageException("Storage overflow", resume.getUuid());
         }
-        insert((int) key, resume);
+        insert(key, resume);
         size++;
     }
 
     @Override
-    protected Resume doGet(Object key) {
-        return storage[(int) key];
+    protected Resume doGet(Integer key) {
+        return storage[key];
     }
 
     @Override
-    protected final void doDelete(Object key) {
+    protected final void doDelete(Integer key) {
         size--;
-        remove((int) key);
+        remove(key);
         storage[size] = null;
     }
 
