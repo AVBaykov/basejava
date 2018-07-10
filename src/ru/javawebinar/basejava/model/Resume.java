@@ -1,14 +1,12 @@
 package ru.javawebinar.basejava.model;
 
-        import java.util.HashMap;
-        import java.util.Map;
-        import java.util.Objects;
-        import java.util.UUID;
+import java.util.*;
 
 
 public class Resume {
     private final String uuid;
     private final String fullName;
+    private List<Contact> contacts = new ArrayList<>();
     private Map<String, Section> sections = new HashMap<>();
 
     public Resume(String fullName) {
