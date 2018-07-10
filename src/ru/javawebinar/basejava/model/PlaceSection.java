@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class PlaceSection extends AbstractSection {
+public class PlaceSection extends Section {
 
     private Map<String, Place> places = new HashMap<>();
 

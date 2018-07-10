@@ -3,7 +3,7 @@ package ru.javawebinar.basejava.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ParagraphSection extends AbstractSection {
+public class ParagraphSection extends Section {
     private List<Paragraph> paragraphList = new ArrayList<>();
 
     ParagraphSection(SectionType type) {
