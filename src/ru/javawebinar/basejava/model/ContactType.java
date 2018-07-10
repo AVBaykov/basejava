@@ -6,5 +6,5 @@ public enum ContactType {
     E_MAIL,
     SOCIAL_NETWORK_PROFILE,
     WEB_SITE,
-    SKYPE
+    MESSENGER
 }
