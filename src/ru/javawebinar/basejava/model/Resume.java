@@ -9,7 +9,7 @@ package ru.javawebinar.basejava.model;
 public class Resume {
     private final String uuid;
     private final String fullName;
-    private Map<String, Section> sections = new HashMap<>();
+    private Map<String, AbstractSection> sections = new HashMap<>();
 
     public Resume(String fullName) {
         this(UUID.randomUUID().toString(), fullName);

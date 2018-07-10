@@ -1,10 +1,10 @@
 package ru.javawebinar.basejava.model;
 
-public abstract class Section {
+public abstract class AbstractSection {
     private final SectionType type;
     private final String title;
 
-    Section(SectionType type){
+    AbstractSection(SectionType type){
         this.type = type;
         this.title = type.getTitle();
     }
