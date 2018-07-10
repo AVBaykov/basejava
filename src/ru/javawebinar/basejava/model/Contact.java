@@ -1,9 +1,9 @@
 package ru.javawebinar.basejava.model;
 
-public abstract class AbstcartContact {
+public abstract class Contact {
     private final ContactType type;
 
-    public AbstcartContact(ContactType type) {
+    public Contact(ContactType type) {
         this.type = type;
     }
 
