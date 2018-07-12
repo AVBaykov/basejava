@@ -21,6 +21,26 @@ public class PlaceSection extends Section {
         places.remove(nameOfOrganisation);
     }
 
+    public void addStartDate(String nameOfOrganisation, LocalDate startDate) {
+        Place place = places.get(nameOfOrganisation);
+        place.startDate = startDate;
+    }
+
+    public void addEndDate(String nameOfOrganisation, LocalDate endDate) {
+        Place place = places.get(nameOfOrganisation);
+        place.endDate = endDate;
+    }
+
+    public void addPosition(String nameOfOrganisation, String position) {
+        Place place = places.get(nameOfOrganisation);
+        place.position = position;
+    }
+
+    public void addDescription(String nameOfOrganisation, List<String> description) {
+        Place place = places.get(nameOfOrganisation);
+        place.description = description;
+    }
+
     private class Place {
         private String nameOfOrganisation;
         private LocalDate startDate;
