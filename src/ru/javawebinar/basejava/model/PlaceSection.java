@@ -1,7 +1,6 @@
 package ru.javawebinar.basejava.model;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -46,7 +45,7 @@ public class PlaceSection extends Section {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        places.forEach((k, v) -> builder.append("\n\r").append(v.toString()));
+        places.forEach((k, v) -> builder.append("\n").append(v));
         return "\n" + this.getTitle() + builder.toString();
     }
 
@@ -54,7 +53,7 @@ public class PlaceSection extends Section {
         private String nameOfOrganisation;
         private LocalDate startDate;
         private LocalDate endDate;
-        private String position;
+        private String position = "";
         private List<String> description = new ArrayList<>();
 
         Place(String nameOfOrganisation) {
@@ -63,12 +62,9 @@ public class PlaceSection extends Section {
 
         @Override
         public String toString() {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/YYYY");
             StringBuilder builder = new StringBuilder();
             description.forEach(builder::append);
-            return "\n" + nameOfOrganisation + "\n"
-                    + startDate.format(formatter) + " - " + endDate.format(formatter) + " " + (position != null ? position + "\n" : "")
-                    + builder.toString();
+            return String.format("\n%s \n%tm/%<tY - %tm/%<tY %s\n%s", nameOfOrganisation, startDate, endDate, position, builder);
         }
     }
 }

@@ -35,14 +35,14 @@ public class ParagraphSection extends Section {
     }
 
     private class Paragraph {
-        private String paragraphName;
+        private String paragraphName = "";
         private List<String> description = new ArrayList<>();
 
         Paragraph() {
         }
 
         Paragraph(String paragraphName) {
-            this.paragraphName = paragraphName;
+            this.paragraphName = paragraphName + ":";
         }
 
 
@@ -50,7 +50,7 @@ public class ParagraphSection extends Section {
         public String toString() {
             StringBuilder builder = new StringBuilder();
             description.forEach(builder::append);
-            return (paragraphName != null ? paragraphName + ": " : "") + builder.toString();
+            return String.format("%s %s", paragraphName, builder);
         }
     }
 }

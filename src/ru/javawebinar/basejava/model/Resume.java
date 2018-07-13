@@ -33,8 +33,15 @@ public class Resume {
         sections.put(type, section);
     }
 
+    public void addContact(Contact contact) {contacts.add(contact);}
+
     public Section getSection(SectionType type) {
         return sections.get(type);
+    }
+
+    public List<Contact> getContacts() {
+        return contacts.stream()
+                .sorted(Comparator.comparing(Contact::getType)).collect(Collectors.toList());
     }
 
     public List<Section> getSections() {
@@ -62,6 +69,6 @@ public class Resume {
 
     @Override
     public String toString() {
-        return uuid + '(' + fullName + ')';
+        return String.format("%s(%s)", uuid, fullName);
     }
 }

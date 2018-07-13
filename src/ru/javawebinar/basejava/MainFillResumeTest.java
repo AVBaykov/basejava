@@ -57,11 +57,19 @@ public class MainFillResumeTest {
 
         resume.addSection(SectionType.QUALIFICATIONS, qualifications);
 
+        Contact phone = new Contact(ContactType.PHONE, "Телефон", "+7 999 999 55 44");
+        Contact address = new Contact(ContactType.ADDRESS, "Адрес", "улица Пушкина, дом Колотушкина");
+        Contact skype = new Contact(ContactType.MESSENGER, "Skype", "skype");
+        Contact email = new Contact(ContactType.EMAIL, "e-mail", "businka@mail.ru");
+        resume.addContact(phone);
+        resume.addContact(address);
+        resume.addContact(skype);
+        resume.addContact(email);
+
 
         System.out.println(resume.getFullName());
-        for (Section section : resume.getSections()) {
-            System.out.println(section);
-        }
+        resume.getContacts().forEach(System.out::println);
+        resume.getSections().forEach(System.out::println);
     }
 
 }

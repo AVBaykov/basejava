@@ -17,7 +17,8 @@ public class TextSection extends Section {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
+        builder.append("\n").append(getTitle()).append("\n");
         descriptionList.forEach(string -> builder.append(string).append(" "));
-        return "\n" + getTitle() + "\n\r" + builder.toString();
+        return builder.toString();
     }
 }
