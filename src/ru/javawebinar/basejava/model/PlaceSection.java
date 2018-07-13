@@ -1,6 +1,8 @@
 package ru.javawebinar.basejava.model;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,7 +11,7 @@ public class PlaceSection extends Section {
 
     private Map<String, Place> places = new HashMap<>();
 
-    PlaceSection(SectionType type) {
+    public PlaceSection(SectionType type) {
         super(type);
     }
 
@@ -36,9 +38,16 @@ public class PlaceSection extends Section {
         place.position = position;
     }
 
-    public void addDescription(String nameOfOrganisation, List<String> description) {
+    public void addDescription(String nameOfOrganisation, String description) {
         Place place = places.get(nameOfOrganisation);
-        place.description = description;
+        place.description.add(description);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        places.forEach((k, v) -> builder.append("\n\r").append(v.toString()));
+        return "\n" + this.getTitle() + builder.toString();
     }
 
     private class Place {
@@ -46,10 +55,20 @@ public class PlaceSection extends Section {
         private LocalDate startDate;
         private LocalDate endDate;
         private String position;
-        private List<String> description;
+        private List<String> description = new ArrayList<>();
 
         Place(String nameOfOrganisation) {
             this.nameOfOrganisation = nameOfOrganisation;
+        }
+
+        @Override
+        public String toString() {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/YYYY");
+            StringBuilder builder = new StringBuilder();
+            description.forEach(builder::append);
+            return "\n" + nameOfOrganisation + "\n"
+                    + startDate.format(formatter) + " - " + endDate.format(formatter) + " " + (position != null ? position + "\n" : "")
+                    + builder.toString();
         }
     }
 }

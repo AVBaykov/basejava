@@ -1,6 +1,6 @@
 package ru.javawebinar.basejava.model;
 
-public abstract class Section {
+public abstract  class Section {
     private final SectionType type;
     private final String title;
 
