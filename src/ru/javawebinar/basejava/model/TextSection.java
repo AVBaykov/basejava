@@ -1,24 +1,22 @@
 package ru.javawebinar.basejava.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class TextSection extends Section {
-    private List<String> descriptionList = new ArrayList<>();
+    private String description;
 
-    public TextSection(SectionType type) {
-        super(type);
+    public TextSection(String description) {
+        this.description = description;
     }
 
-    public void addDescription(String description) {
-        descriptionList.add(description);
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("\n").append(getTitle()).append("\n");
-        descriptionList.forEach(string -> builder.append(string).append(" "));
-        return builder.toString();
+       return description;
     }
 }

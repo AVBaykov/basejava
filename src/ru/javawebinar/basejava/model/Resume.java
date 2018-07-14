@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 public class Resume {
     private final String uuid;
     private final String fullName;
-    private List<Contact> contacts = new ArrayList<>();
+    private Map<ContactType, Contact> contacts = new HashMap<>();
     private Map<SectionType, Section> sections = new HashMap<>();
 
     public Resume(String fullName) {
@@ -33,20 +33,24 @@ public class Resume {
         sections.put(type, section);
     }
 
-    public void addContact(Contact contact) {contacts.add(contact);}
+    public void addContact(ContactType type, Contact contact) {contacts.put(type, contact);}
 
     public Section getSection(SectionType type) {
         return sections.get(type);
     }
 
-    public List<Contact> getContacts() {
-        return contacts.stream()
-                .sorted(Comparator.comparing(Contact::getType)).collect(Collectors.toList());
+    public Map<ContactType, Contact> getContacts() {
+        return contacts.entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByKey())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (ov, nv) -> ov, LinkedHashMap::new));
     }
 
-    public List<Section> getSections() {
-        return sections.values().stream()
-                .sorted(Comparator.comparing(Section::getType)).collect(Collectors.toList());
+    public Map<SectionType, Section> getSections() {
+        return sections.entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByKey())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (ov, nv) -> ov, LinkedHashMap::new));
     }
 
     @Override

@@ -2,51 +2,37 @@ package ru.javawebinar.basejava.model;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class PlaceSection extends Section {
 
-    private Map<String, Place> places = new HashMap<>();
-
-    public PlaceSection(SectionType type) {
-        super(type);
-    }
+    private List<Place> places = new ArrayList<>();
 
     public void addPlace(String nameOfOrganisation) {
-        places.put(nameOfOrganisation, new Place(nameOfOrganisation));
+        places.add(new Place(nameOfOrganisation));
     }
 
-    public void removePlace(String nameOfOrganisation) {
-        places.remove(nameOfOrganisation);
+    public void addStartDate(int index, LocalDate startDate) {
+        places.get(index).startDate = startDate;
     }
 
-    public void addStartDate(String nameOfOrganisation, LocalDate startDate) {
-        Place place = places.get(nameOfOrganisation);
-        place.startDate = startDate;
+    public void addEndDate(int index, LocalDate endDate) {
+        places.get(index).endDate = endDate;
     }
 
-    public void addEndDate(String nameOfOrganisation, LocalDate endDate) {
-        Place place = places.get(nameOfOrganisation);
-        place.endDate = endDate;
+    public void addPosition(int index, String position) {
+        places.get(index).position = position;
     }
 
-    public void addPosition(String nameOfOrganisation, String position) {
-        Place place = places.get(nameOfOrganisation);
-        place.position = position;
-    }
-
-    public void addDescription(String nameOfOrganisation, String description) {
-        Place place = places.get(nameOfOrganisation);
-        place.description.add(description);
+    public void addDescription(int index, String description) {
+        places.get(index).description = description;
     }
 
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        places.forEach((k, v) -> builder.append("\n").append(v));
-        return "\n" + this.getTitle() + builder.toString();
+        places.forEach(place -> builder.append("\n").append(place));
+        return builder.toString();
     }
 
     private class Place {
@@ -54,7 +40,7 @@ public class PlaceSection extends Section {
         private LocalDate startDate;
         private LocalDate endDate;
         private String position = "";
-        private List<String> description = new ArrayList<>();
+        private String description;
 
         Place(String nameOfOrganisation) {
             this.nameOfOrganisation = nameOfOrganisation;
@@ -62,9 +48,7 @@ public class PlaceSection extends Section {
 
         @Override
         public String toString() {
-            StringBuilder builder = new StringBuilder();
-            description.forEach(builder::append);
-            return String.format("\n%s \n%tm/%<tY - %tm/%<tY %s\n%s", nameOfOrganisation, startDate, endDate, position, builder);
+            return String.format("%s \n%tm/%<tY - %tm/%<tY %s\n%s\n", nameOfOrganisation, startDate, endDate, position, description);
         }
     }
 }
