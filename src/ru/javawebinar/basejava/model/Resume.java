@@ -1,14 +1,16 @@
 package ru.javawebinar.basejava.model;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.EnumMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
 
 
 public class Resume {
     private final String uuid;
     private final String fullName;
-    private Map<ContactType, Contact> contacts = new HashMap<>();
-    private Map<SectionType, Section> sections = new HashMap<>();
+    private Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
+    private Map<SectionType, Section> sections = new EnumMap<>(SectionType.class);
 
     public Resume(String fullName) {
         this(UUID.randomUUID().toString(), fullName);
@@ -29,28 +31,12 @@ public class Resume {
         return uuid;
     }
 
-    public void addSection(SectionType type, Section section) {
-        sections.put(type, section);
+    public String getContact(ContactType type) {
+        return contacts.get(type);
     }
-
-    public void addContact(ContactType type, Contact contact) {contacts.put(type, contact);}
 
     public Section getSection(SectionType type) {
         return sections.get(type);
-    }
-
-    public Map<ContactType, Contact> getContacts() {
-        return contacts.entrySet()
-                .stream()
-                .sorted(Map.Entry.comparingByKey())
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (ov, nv) -> ov, LinkedHashMap::new));
-    }
-
-    public Map<SectionType, Section> getSections() {
-        return sections.entrySet()
-                .stream()
-                .sorted(Map.Entry.comparingByKey())
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (ov, nv) -> ov, LinkedHashMap::new));
     }
 
     @Override

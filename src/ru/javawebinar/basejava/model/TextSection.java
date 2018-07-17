@@ -1,22 +1,36 @@
 package ru.javawebinar.basejava.model;
 
-public class TextSection extends Section {
-    private String description;
+import java.util.Objects;
 
-    public TextSection(String description) {
-        this.description = description;
+public class TextSection extends Section {
+    private final String content;
+
+    public TextSection(String content) {
+        Objects.requireNonNull(content, "content list mustn't be null");
+        this.content = content;
     }
 
     public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
+        return content;
     }
 
     @Override
     public String toString() {
-       return description;
+        return content;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TextSection that = (TextSection) o;
+
+        return content.equals(that.content);
+    }
+
+    @Override
+    public int hashCode() {
+        return content.hashCode();
     }
 }
