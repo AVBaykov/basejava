@@ -4,7 +4,13 @@ import org.junit.Before;
 import org.junit.Test;
 import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.NotExistStorageException;
-import ru.javawebinar.basejava.model.Resume;
+import ru.javawebinar.basejava.model.*;
+import ru.javawebinar.basejava.util.DateUtil;
+
+import java.time.LocalDate;
+import java.time.Month;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -35,6 +41,32 @@ public abstract class AbstractStorageTest {
         storage.save(new Resume(UUID_1, NAME_1));
         storage.save(new Resume(UUID_2, NAME_2));
         storage.save(new Resume(UUID_3, NAME_3));
+
+        resume2.addContact(ContactType.PHONE, "телефон");
+        resume2.addContact(ContactType.SKYPE, "skype");
+        resume2.addContact(ContactType.EMAIL, "e-mail");
+        resume2.addSection(SectionType.PERSONAL, new TextSection("В меру упитанный мужчина"));
+        resume2.addSection(SectionType.OBJECTIVE, new TextSection("Карлсон"));
+        List<String> achievements = new ArrayList<>();
+        achievements.add("умею летать");
+        achievements.add("шучу, я не умею летать");
+        resume2.addSection(SectionType.ACHIEVEMENT, new ParagraphSection(achievements));
+        List<String> qualifications = new ArrayList<>();
+        qualifications.add("супер бизон");
+        qualifications.add("сомнительные достижения");
+        resume2.addSection(SectionType.QUALIFICATIONS, new ParagraphSection(qualifications));
+        LocalDate startDate = DateUtil.of(2014, Month.JANUARY);
+        LocalDate endDate = DateUtil.of(2016, Month.APRIL);
+        PlaceSection workPlace = new PlaceSection();
+        workPlace.addPlace("Рога и копыта", "URL", startDate, endDate, "стажер", "учился");
+        startDate = DateUtil.of(2016, Month.APRIL);
+        endDate = DateUtil.of(2018, Month.JANUARY);
+        workPlace.addPlace("Рога и копыта", "URL", startDate, endDate, "инженер", "работал");
+        resume2.addSection(SectionType.EXPERIENCE, workPlace);
+        startDate = DateUtil.of(2009, Month.SEPTEMBER);
+        endDate = DateUtil.of(2014, Month.JULY);
+        PlaceSection university = new PlaceSection();
+        university.addPlace("Университет", null, startDate, endDate, "Инженер по рогам и копытам", null);
     }
 
     @Test

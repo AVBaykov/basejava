@@ -17,7 +17,7 @@ public class Place {
         periodList.add(new Period(startDate, endDate, position, description));
     }
 
-    public void addPeriod(LocalDate startDate, LocalDate endDate, String position, String description) {
+    void addPeriod(LocalDate startDate, LocalDate endDate, String position, String description) {
         periodList.add(new Period(startDate, endDate, position, description));
     }
 
@@ -33,7 +33,7 @@ public class Place {
         private String position;
         private String description;
 
-         Period(LocalDate startDate, LocalDate endDate, String position, String description) {
+        Period(LocalDate startDate, LocalDate endDate, String position, String description) {
             this.startDate = startDate;
             this.endDate = endDate;
             this.position = position;
