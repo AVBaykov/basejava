@@ -28,14 +28,6 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     protected abstract Resume doRead(File file) throws IOException;
 
-    private void createFileSafety(File file) {
-        try {
-            file.createNewFile();
-        } catch (IOException e) {
-            throw new StorageException("IO error", file.getName(), e);
-        }
-    }
-
     private File[] listFilesSafety(File directory) {
         File[] files = directory.listFiles();
         if (files == null) {
@@ -66,7 +58,11 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     protected void doSave(File file, Resume resume) {
-        createFileSafety(file);
+        try {
+            file.createNewFile();
+        } catch (IOException e) {
+            throw new StorageException("IO error", file.getName(), e);
+        }
         doUpdate(file, resume);
     }
 
@@ -90,11 +86,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     Stream<Resume> getStreamForSort() {
         List<Resume> result = new ArrayList<>();
         for (File file : listFilesSafety(directory)) {
-            try {
-                result.add(doRead(file));
-            } catch (IOException e) {
-                throw new StorageException("IO error", file.getName(), e);
-            }
+                result.add(doGet(file));
         }
         return result.stream();
     }
