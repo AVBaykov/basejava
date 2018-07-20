@@ -55,18 +55,22 @@ public abstract class AbstractStorageTest {
         qualifications.add("супер бизон");
         qualifications.add("сомнительные достижения");
         resume2.addSection(SectionType.QUALIFICATIONS, new ParagraphSection(qualifications));
+
         LocalDate startDate = DateUtil.of(2014, Month.JANUARY);
         LocalDate endDate = DateUtil.of(2016, Month.APRIL);
-        PlaceSection workPlace = new PlaceSection();
-        workPlace.addPlace("Рога и копыта", "URL", startDate, endDate, "стажер", "учился");
+        List<Place> places = new ArrayList<>();
+        Place place = new Place("Рога и копыта", "URL", startDate, endDate, "стажер", "учился");
         startDate = DateUtil.of(2016, Month.APRIL);
         endDate = DateUtil.of(2018, Month.JANUARY);
-        workPlace.addPlace("Рога и копыта", "URL", startDate, endDate, "инженер", "работал");
+        place.addPeriod(startDate, endDate, "инженер", "работал");
+        PlaceSection workPlace = new PlaceSection(places);
+
         resume2.addSection(SectionType.EXPERIENCE, workPlace);
         startDate = DateUtil.of(2009, Month.SEPTEMBER);
         endDate = DateUtil.of(2014, Month.JULY);
-        PlaceSection university = new PlaceSection();
-        university.addPlace("Университет", null, startDate, endDate, "Инженер по рогам и копытам", null);
+        List<Place> educationPlaces = new ArrayList<>();
+        educationPlaces.add(new Place("Университет", null, startDate, endDate, "Инженер по рогам и копытам", null));
+        PlaceSection university = new PlaceSection(educationPlaces);
     }
 
     @Test

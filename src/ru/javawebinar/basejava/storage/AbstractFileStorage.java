@@ -26,7 +26,15 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     protected abstract void doWrite(File file, Resume resume) throws IOException;
 
-    protected abstract Resume doRead(File file);
+    protected abstract Resume doRead(File file) throws IOException;
+
+    private void createFileSafety(File file) {
+        try {
+            file.createNewFile();
+        } catch (IOException e) {
+            throw new StorageException("IO error", file.getName(), e);
+        }
+    }
 
     @Override
     protected File getKey(String uuid) {
@@ -49,45 +57,50 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     protected void doSave(File file, Resume resume) {
-        try {
-            file.createNewFile();
-            doWrite(file, resume);
-        } catch (IOException e) {
-            throw new StorageException("IO error", file.getName(), e);
-        }
-
+        createFileSafety(file);
+        doUpdate(file, resume);
     }
 
     @Override
     protected Resume doGet(File file) {
-        return doRead(file);
+        try {
+            return doRead(file);
+        } catch (IOException e) {
+            throw new StorageException("IO error", file.getName(), e);
+        }
     }
 
     @Override
     protected void doDelete(File file) {
-        file.delete();
+        if (!file.delete()) {
+            throw new StorageException("File was not deleted", file.getName());
+        }
     }
 
     @Override
     Stream<Resume> getStreamForSort() {
         List<Resume> result = new ArrayList<>();
-        for (File file : directory.listFiles()) {
-            result.add(doRead(file));
+        for (File file : Objects.requireNonNull(directory.listFiles(), "directory must not be null")) {
+            try {
+                result.add(doRead(file));
+            } catch (IOException e) {
+                throw new StorageException("IO error", file.getName(), e);
+            }
         }
         return result.stream();
     }
 
     @Override
     public void clear() {
-        for (File file : directory.listFiles()) {
+        for (File file : Objects.requireNonNull(directory.listFiles(), "directory must not be null")) {
             if (file.isFile()) {
-                file.delete();
+                doDelete(file);
             }
         }
     }
 
     @Override
     public int size() {
-        return directory.listFiles().length;
+        return Objects.requireNonNull(directory.listFiles(), "directory must not be null").length;
     }
 }

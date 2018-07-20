@@ -9,7 +9,7 @@ public class Place {
     private Link nameOfOrganisation;
     private List<Period> periodList = new ArrayList<>();
 
-    Place(String name, String url, LocalDate startDate, LocalDate endDate, String position, String description) {
+    public Place(String name, String url, LocalDate startDate, LocalDate endDate, String position, String description) {
         Objects.requireNonNull(startDate, "startDate must not be null");
         Objects.requireNonNull(endDate, "endDate must not be null");
         Objects.requireNonNull(position, "position must not be null");
@@ -17,7 +17,7 @@ public class Place {
         periodList.add(new Period(startDate, endDate, position, description));
     }
 
-    void addPeriod(LocalDate startDate, LocalDate endDate, String position, String description) {
+    public void addPeriod(LocalDate startDate, LocalDate endDate, String position, String description) {
         periodList.add(new Period(startDate, endDate, position, description));
     }
 
