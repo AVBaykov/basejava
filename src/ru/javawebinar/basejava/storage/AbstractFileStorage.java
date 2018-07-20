@@ -36,6 +36,15 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         }
     }
 
+    private File[] listFilesSafety(File directory) {
+        File[] files = directory.listFiles();
+        if (files == null) {
+            throw new StorageException("IO error", directory.getName());
+        } else {
+            return files;
+        }
+    }
+
     @Override
     protected File getKey(String uuid) {
         return new File(directory, uuid);
@@ -80,7 +89,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     @Override
     Stream<Resume> getStreamForSort() {
         List<Resume> result = new ArrayList<>();
-        for (File file : Objects.requireNonNull(directory.listFiles(), "directory must not be null")) {
+        for (File file : listFilesSafety(directory)) {
             try {
                 result.add(doRead(file));
             } catch (IOException e) {
@@ -92,7 +101,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     public void clear() {
-        for (File file : Objects.requireNonNull(directory.listFiles(), "directory must not be null")) {
+        for (File file : listFilesSafety(directory)) {
             if (file.isFile()) {
                 doDelete(file);
             }
@@ -101,6 +110,6 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     public int size() {
-        return Objects.requireNonNull(directory.listFiles(), "directory must not be null").length;
+        return listFilesSafety(directory).length;
     }
 }
