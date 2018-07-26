@@ -1,10 +1,15 @@
 package ru.javawebinar.basejava.model;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 public class ParagraphSection extends Section {
     private final List<String> paragraphList;
+
+    public ParagraphSection(String... paragraphs) {
+        this(Arrays.asList(paragraphs));
+    }
 
     public ParagraphSection(List<String> paragraphList) {
         Objects.requireNonNull(paragraphList, "paragraphs must not be null");

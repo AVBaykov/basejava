@@ -11,12 +11,16 @@ public class MailFile {
     }
 
     public static void dirWalker(File dir) {
+        File[] files = dir.listFiles();
 
-        for (File file : Objects.requireNonNull(dir.listFiles())) {
-            if (file.isDirectory()) {
-                dirWalker(file);
-            } else {
-                System.out.println(file.getName());
+        if (files != null) {
+            for (File file : files) {
+                if (file.isFile()) {
+                    System.out.println("File: " + file.getName());
+                } else if (file.isDirectory()) {
+                    System.out.println("Directory: " + file.getName());
+                    dirWalker(file);
+                }
             }
         }
     }

@@ -1,20 +1,27 @@
 package ru.javawebinar.basejava.model;
 
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import static ru.javawebinar.basejava.util.DateUtil.NOW;
+import static ru.javawebinar.basejava.util.DateUtil.of;
+
 public class Place {
-    private Link nameOfOrganisation;
+    private final Link homePage;
     private List<Period> periodList = new ArrayList<>();
 
-    public Place(String name, String url, LocalDate startDate, LocalDate endDate, String position, String description) {
-        Objects.requireNonNull(startDate, "startDate must not be null");
-        Objects.requireNonNull(endDate, "endDate must not be null");
-        Objects.requireNonNull(position, "position must not be null");
-        this.nameOfOrganisation = new Link(name, url);
-        periodList.add(new Period(startDate, endDate, position, description));
+
+    public Place(String name, String url, Period... periods) {
+        this(new Link(name, url), Arrays.asList(periods));
+    }
+
+    public Place(Link homePage, List<Period> periods) {
+        this.homePage = homePage;
+        this.periodList = periods;
     }
 
     public void addPeriod(LocalDate startDate, LocalDate endDate, String position, String description) {
@@ -23,17 +30,28 @@ public class Place {
 
     @Override
     public String toString() {
-        return String.format("%s\n%s", nameOfOrganisation, periodList.toString());
+        return String.format("%s\n%s", homePage, periodList.toString());
     }
 
 
-    private class Period {
+    public static class Period {
         private LocalDate startDate;
         private LocalDate endDate;
         private String position;
         private String description;
 
-        Period(LocalDate startDate, LocalDate endDate, String position, String description) {
+        public Period(int startYear, Month startMonth, String position, String description) {
+            this(of(startYear, startMonth), NOW, position, description);
+        }
+
+        public Period(int startYear, Month startMonth, int endYear, Month endMonth, String position, String description) {
+            this(of(startYear, startMonth), of(endYear, endMonth), position, description);
+        }
+
+        public Period(LocalDate startDate, LocalDate endDate, String position, String description) {
+            Objects.requireNonNull(startDate, "startDate must not be null");
+            Objects.requireNonNull(endDate, "endDate must not be null");
+            Objects.requireNonNull(position, "position must not be null");
             this.startDate = startDate;
             this.endDate = endDate;
             this.position = position;
