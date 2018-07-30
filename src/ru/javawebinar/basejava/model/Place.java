@@ -1,5 +1,6 @@
 package ru.javawebinar.basejava.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
@@ -10,7 +11,9 @@ import java.util.Objects;
 import static ru.javawebinar.basejava.util.DateUtil.NOW;
 import static ru.javawebinar.basejava.util.DateUtil.of;
 
-public class Place {
+public class Place implements Serializable {
+
+
     private final Link homePage;
     private List<Period> periodList = new ArrayList<>();
 
@@ -34,7 +37,7 @@ public class Place {
     }
 
 
-    public static class Period {
+    public static class Period implements Serializable {
         private LocalDate startDate;
         private LocalDate endDate;
         private String position;

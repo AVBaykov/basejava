@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Objects;
 
 public class ParagraphSection extends Section {
+    private static final long serialVersionUID = 1L;
+
     private final List<String> paragraphList;
 
     public ParagraphSection(String... paragraphs) {

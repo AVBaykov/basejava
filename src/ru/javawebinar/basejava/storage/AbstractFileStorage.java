@@ -23,9 +23,9 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         this.directory = directory;
     }
 
-    protected abstract void doWrite(OutputStream file, Resume resume) throws IOException;
+    protected abstract void doWrite(OutputStream os, Resume resume) throws IOException;
 
-    protected abstract Resume doRead(InputStream file) throws IOException;
+    protected abstract Resume doRead(InputStream is) throws IOException;
 
     private File[] listFilesSafety(File directory) {
         File[] files = directory.listFiles();
