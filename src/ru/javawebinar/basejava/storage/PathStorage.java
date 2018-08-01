@@ -2,6 +2,7 @@ package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
+import ru.javawebinar.basejava.strategies.SerializationStrategy;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -33,7 +34,11 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     protected void doUpdate(Path path, Resume resume) {
-        strategy.doWrite(path.toString(), resume);
+        try {
+            strategy.doWrite(Files.newOutputStream(path), resume);
+        } catch (IOException e) {
+            throw new StorageException("I/O error", null, e);
+        }
     }
 
     @Override
@@ -53,7 +58,11 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     protected Resume doGet(Path path) {
-        return strategy.doRead(path.toString());
+        try {
+            return strategy.doRead(Files.newInputStream(path));
+        } catch (IOException e) {
+            throw new StorageException("I/O error", null, e);
+        }
     }
 
     @Override
