@@ -26,10 +26,6 @@ public class FileStorage extends AbstractStorage<File> {
         this.strategy = strategy;
     }
 
-    public void setStrategy(SerializationStrategy strategy) {
-        this.strategy = strategy;
-    }
-
     private File[] listFilesSafety(File directory) {
         File[] files = directory.listFiles();
         if (files == null) {

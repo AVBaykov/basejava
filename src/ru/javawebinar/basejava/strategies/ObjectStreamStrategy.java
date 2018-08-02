@@ -9,7 +9,7 @@ public class ObjectStreamStrategy implements SerializationStrategy {
 
     @Override
     public void doWrite(OutputStream os, Resume resume) {
-        try (ObjectOutputStream oos = new ObjectOutputStream(os)) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(os))) {
             oos.writeObject(resume);
         } catch (IOException e) {
             throw new StorageException("Resume write error", null, e);
@@ -18,7 +18,7 @@ public class ObjectStreamStrategy implements SerializationStrategy {
 
     @Override
     public Resume doRead(InputStream is) {
-        try (ObjectInputStream ois = new ObjectInputStream(is)) {
+        try (ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(is))) {
             return (Resume) ois.readObject();
         } catch (Exception e) {
             throw new StorageException("Resume read error", null, e);
