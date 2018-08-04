@@ -7,7 +7,10 @@ import java.util.Objects;
 public class ParagraphSection extends Section {
     private static final long serialVersionUID = 1L;
 
-    private final List<String> paragraphList;
+    private List<String> paragraphList;
+
+    public ParagraphSection() {
+    }
 
     public ParagraphSection(String... paragraphs) {
         this(Arrays.asList(paragraphs));

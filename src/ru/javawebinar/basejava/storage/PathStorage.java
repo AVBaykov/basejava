@@ -2,8 +2,9 @@ package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
-import ru.javawebinar.basejava.strategies.SerializationStrategy;
+import ru.javawebinar.basejava.storage.strategies.SerializationStrategy;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -35,7 +36,7 @@ public class PathStorage extends AbstractStorage<Path> {
         try {
             strategy.doWrite(Files.newOutputStream(path), resume);
         } catch (IOException e) {
-            throw new StorageException("I/O error", null, e);
+            throw new StorageException("I/O error", e);
         }
     }
 
@@ -57,9 +58,9 @@ public class PathStorage extends AbstractStorage<Path> {
     @Override
     protected Resume doGet(Path path) {
         try {
-            return strategy.doRead(Files.newInputStream(path));
+            return strategy.doRead(new BufferedInputStream(Files.newInputStream(path)));
         } catch (IOException e) {
-            throw new StorageException("I/O error", null, e);
+            throw new StorageException("I/O error", e);
         }
     }
 
@@ -86,7 +87,7 @@ public class PathStorage extends AbstractStorage<Path> {
         try {
             Files.list(directory).forEach(this::doDelete);
         } catch (IOException e) {
-            throw new StorageException("Path delete error", null);
+            throw new StorageException("Path delete error", e);
         }
     }
 

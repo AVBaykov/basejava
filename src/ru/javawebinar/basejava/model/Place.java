@@ -1,5 +1,10 @@
 package ru.javawebinar.basejava.model;
 
+import ru.javawebinar.basejava.util.LocalDateAdapter;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Month;
@@ -11,12 +16,16 @@ import java.util.Objects;
 import static ru.javawebinar.basejava.util.DateUtil.NOW;
 import static ru.javawebinar.basejava.util.DateUtil.of;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Place implements Serializable {
+    private static final long serialVersionUID = 1L;
 
 
-    private final Link homePage;
+    private Link homePage;
     private List<Period> periodList = new ArrayList<>();
 
+    public Place() {
+    }
 
     public Place(String name, String url, Period... periods) {
         this(new Link(name, url), Arrays.asList(periods));
@@ -32,16 +41,36 @@ public class Place implements Serializable {
     }
 
     @Override
+    public boolean equals(Object o) {
+
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Place place = (Place) o;
+        return Objects.equals(homePage, place.homePage) &&
+                Objects.equals(periodList, place.periodList);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(homePage, periodList);
+    }
+
+    @Override
     public String toString() {
         return String.format("%s\n%s", homePage, periodList.toString());
     }
 
-
+    @XmlAccessorType(XmlAccessType.FIELD)
     public static class Period implements Serializable {
+        @XmlJavaTypeAdapter(LocalDateAdapter.class)
         private LocalDate startDate;
+        @XmlJavaTypeAdapter(LocalDateAdapter.class)
         private LocalDate endDate;
         private String position;
         private String description;
+
+        public Period() {
+        }
 
         public Period(int startYear, Month startMonth, String position, String description) {
             this(of(startYear, startMonth), NOW, position, description);
@@ -70,22 +99,16 @@ public class Place implements Serializable {
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-
             Period period = (Period) o;
-
-            if (!startDate.equals(period.startDate)) return false;
-            if (!endDate.equals(period.endDate)) return false;
-            if (!position.equals(period.position)) return false;
-            return description != null ? description.equals(period.description) : period.description == null;
+            return Objects.equals(startDate, period.startDate) &&
+                    Objects.equals(endDate, period.endDate) &&
+                    Objects.equals(position, period.position) &&
+                    Objects.equals(description, period.description);
         }
 
         @Override
         public int hashCode() {
-            int result = startDate.hashCode();
-            result = 31 * result + endDate.hashCode();
-            result = 31 * result + position.hashCode();
-            result = 31 * result + (description != null ? description.hashCode() : 0);
-            return result;
+            return Objects.hash(startDate, endDate, position, description);
         }
     }
 }

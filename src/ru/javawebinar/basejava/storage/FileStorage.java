@@ -2,9 +2,12 @@ package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
-import ru.javawebinar.basejava.strategies.SerializationStrategy;
+import ru.javawebinar.basejava.storage.strategies.SerializationStrategy;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -44,8 +47,8 @@ public class FileStorage extends AbstractStorage<File> {
     protected void doUpdate(File file, Resume resume) {
         try {
             strategy.doWrite(new FileOutputStream(file), resume);
-        } catch (FileNotFoundException e) {
-            throw new StorageException("File not found", null, e);
+        } catch (IOException e) {
+            throw new StorageException("File not found", e);
         }
     }
 
@@ -68,8 +71,8 @@ public class FileStorage extends AbstractStorage<File> {
     protected Resume doGet(File file) {
         try {
             return strategy.doRead(new FileInputStream(file));
-        } catch (FileNotFoundException e) {
-            throw new StorageException("File not found", null, e);
+        } catch (IOException e) {
+            throw new StorageException("File not found", e);
         }
     }
 
