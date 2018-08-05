@@ -2,7 +2,7 @@ package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
-import ru.javawebinar.basejava.storage.strategies.SerializationStrategy;
+import ru.javawebinar.basejava.storage.strategies.Serializer;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,9 +15,9 @@ import java.util.stream.Stream;
 
 public class FileStorage extends AbstractStorage<File> {
     private File directory;
-    private SerializationStrategy strategy;
+    private Serializer serializer;
 
-    protected FileStorage(File directory, SerializationStrategy strategy) {
+    protected FileStorage(File directory, Serializer serializer) {
         Objects.requireNonNull(directory, "directory must not be null");
         if (!directory.isDirectory()) {
             throw new IllegalArgumentException(directory.getAbsolutePath() + " is not directory");
@@ -26,7 +26,7 @@ public class FileStorage extends AbstractStorage<File> {
             throw new IllegalArgumentException(directory.getAbsolutePath() + " is not readable/writable");
         }
         this.directory = directory;
-        this.strategy = strategy;
+        this.serializer = serializer;
     }
 
     private File[] listFilesSafety(File directory) {
@@ -46,7 +46,7 @@ public class FileStorage extends AbstractStorage<File> {
     @Override
     protected void doUpdate(File file, Resume resume) {
         try {
-            strategy.doWrite(new FileOutputStream(file), resume);
+            serializer.doWrite(new FileOutputStream(file), resume);
         } catch (IOException e) {
             throw new StorageException("File not found", e);
         }
@@ -70,7 +70,7 @@ public class FileStorage extends AbstractStorage<File> {
     @Override
     protected Resume doGet(File file) {
         try {
-            return strategy.doRead(new FileInputStream(file));
+            return serializer.doRead(new FileInputStream(file));
         } catch (IOException e) {
             throw new StorageException("File not found", e);
         }

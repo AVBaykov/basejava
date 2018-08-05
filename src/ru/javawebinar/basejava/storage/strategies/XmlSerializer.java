@@ -6,10 +6,10 @@ import ru.javawebinar.basejava.util.XmlParser;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
-public class XmlStrategy implements SerializationStrategy {
+public class XmlSerializer implements Serializer {
     private XmlParser xmlParser;
 
-    public XmlStrategy() {
+    public XmlSerializer() {
         this.xmlParser = new XmlParser(Resume.class, Place.class, Link.class, PlaceSection.class,
                 TextSection.class, ParagraphSection.class, Place.Period.class);
     }

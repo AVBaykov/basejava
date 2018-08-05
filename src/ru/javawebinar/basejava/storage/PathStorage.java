@@ -2,7 +2,7 @@ package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
-import ru.javawebinar.basejava.storage.strategies.SerializationStrategy;
+import ru.javawebinar.basejava.storage.strategies.Serializer;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -14,15 +14,15 @@ import java.util.stream.Stream;
 
 public class PathStorage extends AbstractStorage<Path> {
     private Path directory;
-    private SerializationStrategy strategy;
+    private Serializer serializer;
 
-    protected PathStorage(String dir, SerializationStrategy strategy) {
+    protected PathStorage(String dir, Serializer serializer) {
         directory = Paths.get(dir);
         Objects.requireNonNull(directory, "directory must not be null");
         if (!Files.isDirectory(directory) || !Files.isWritable(directory)) {
             throw new IllegalArgumentException(dir + " is not directory or is not writable");
         }
-        this.strategy = strategy;
+        this.serializer = serializer;
     }
 
 
@@ -34,7 +34,7 @@ public class PathStorage extends AbstractStorage<Path> {
     @Override
     protected void doUpdate(Path path, Resume resume) {
         try {
-            strategy.doWrite(Files.newOutputStream(path), resume);
+            serializer.doWrite(Files.newOutputStream(path), resume);
         } catch (IOException e) {
             throw new StorageException("I/O error", e);
         }
@@ -58,7 +58,7 @@ public class PathStorage extends AbstractStorage<Path> {
     @Override
     protected Resume doGet(Path path) {
         try {
-            return strategy.doRead(new BufferedInputStream(Files.newInputStream(path)));
+            return serializer.doRead(new BufferedInputStream(Files.newInputStream(path)));
         } catch (IOException e) {
             throw new StorageException("I/O error", e);
         }
