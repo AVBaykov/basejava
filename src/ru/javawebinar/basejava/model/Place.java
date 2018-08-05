@@ -40,6 +40,14 @@ public class Place implements Serializable {
         periodList.add(new Period(startDate, endDate, position, description));
     }
 
+    public Link getHomePage() {
+        return homePage;
+    }
+
+    public List<Period> getPeriodList() {
+        return periodList;
+    }
+
     @Override
     public boolean equals(Object o) {
 
@@ -88,6 +96,22 @@ public class Place implements Serializable {
             this.endDate = endDate;
             this.position = position;
             this.description = description;
+        }
+
+        public LocalDate getStartDate() {
+            return startDate;
+        }
+
+        public LocalDate getEndDate() {
+            return endDate;
+        }
+
+        public String getPosition() {
+            return position;
+        }
+
+        public String getDescription() {
+            return description;
         }
 
         @Override

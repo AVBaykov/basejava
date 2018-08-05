@@ -15,7 +15,7 @@ public class TextSection extends Section {
         this.content = content;
     }
 
-    public String getDescription() {
+    public String getContent() {
         return content;
     }
 

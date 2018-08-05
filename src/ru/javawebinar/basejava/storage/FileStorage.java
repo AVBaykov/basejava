@@ -2,7 +2,7 @@ package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
-import ru.javawebinar.basejava.storage.strategies.Serializer;
+import ru.javawebinar.basejava.storage.serializer.Serializer;
 
 import java.io.File;
 import java.io.FileInputStream;

@@ -1,4 +1,4 @@
-package ru.javawebinar.basejava.storage.strategies;
+package ru.javawebinar.basejava.storage.serializer;
 
 import ru.javawebinar.basejava.model.*;
 import ru.javawebinar.basejava.util.XmlParser;
