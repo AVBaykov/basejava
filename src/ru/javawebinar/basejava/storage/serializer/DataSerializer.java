@@ -7,7 +7,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class DataSerializer implements Serializer {
     @Override
@@ -22,25 +21,27 @@ public class DataSerializer implements Serializer {
                 dos.writeUTF(entry.getValue());
             }
             Map<SectionType, Section> sections = resume.getSections();
-            dos.writeInt((int) sections
-                    .values()
-                    .stream().filter(Objects::nonNull)
-                    .count());
+            dos.writeInt(sections.size());
 
             for (Map.Entry<SectionType, Section> entry : sections.entrySet()) {
-                Section section = entry.getValue();
-                if (section != null) {
-                    dos.writeUTF(entry.getKey().name());
-                    if (section instanceof TextSection) {
-                        dos.writeUTF(((TextSection) section).getContent());
-                    } else if (section instanceof ParagraphSection) {
-                        List<String> list = ((ParagraphSection) section).getParagraphList();
+                SectionType type = entry.getKey();
+                dos.writeUTF(type.name());
+                switch (type) {
+                    case PERSONAL:
+                    case OBJECTIVE:
+                        dos.writeUTF(((TextSection) entry.getValue()).getContent());
+                        break;
+                    case ACHIEVEMENT:
+                    case QUALIFICATIONS:
+                        List<String> list = ((ParagraphSection) entry.getValue()).getParagraphList();
                         dos.writeInt(list.size());
                         for (String s : list) {
                             dos.writeUTF(s);
                         }
-                    } else if (section instanceof PlaceSection) {
-                        List<Place> placeList = ((PlaceSection) section).getPlaces();
+                        break;
+                    case EXPERIENCE:
+                    case EDUCATION:
+                        List<Place> placeList = ((PlaceSection) entry.getValue()).getPlaces();
                         dos.writeInt(placeList.size());
                         for (Place place : placeList) {
                             String name = place.getHomePage().getName();
@@ -49,7 +50,7 @@ public class DataSerializer implements Serializer {
                             if (url != null) {
                                 dos.writeUTF(url);
                             } else {
-                                dos.writeUTF("null");
+                                dos.writeUTF("");
                             }
                             List<Place.Period> periodList = place.getPeriodList();
                             dos.writeInt(periodList.size());
@@ -64,11 +65,11 @@ public class DataSerializer implements Serializer {
                                 if (description != null) {
                                     dos.writeUTF(description);
                                 } else {
-                                    dos.writeUTF("null");
+                                    dos.writeUTF("");
                                 }
                             }
                         }
-                    }
+                        break;
                 }
             }
         }
@@ -87,43 +88,50 @@ public class DataSerializer implements Serializer {
             size = dis.readInt();
             for (int i = 0; i < size; i++) {
                 SectionType type = SectionType.valueOf(dis.readUTF());
-                if (type == SectionType.PERSONAL || type == SectionType.OBJECTIVE) {
-                    resume.addSection(type, new TextSection(dis.readUTF()));
-                } else if (type == SectionType.ACHIEVEMENT || type == SectionType.QUALIFICATIONS) {
-                    List<String> list = new ArrayList<>();
-                    int listSize = dis.readInt();
-                    for (int j = 0; j < listSize; j++) {
-                        list.add(dis.readUTF());
-                    }
-                    resume.addSection(type, new ParagraphSection(list));
-                } else if (type == SectionType.EXPERIENCE || type == SectionType.EDUCATION) {
-                    List<Place> places = new ArrayList<>();
-                    int placeSize = dis.readInt();
-                    for (int j = 0; j < placeSize; j++) {
-                        Link link;
-                        String name = dis.readUTF();
-                        String url = dis.readUTF();
-                        if (url.equals("null")) {
-                            link = new Link(name, null);
-                        } else {
-                            link = new Link(name, url);
+                switch (type) {
+                    case PERSONAL:
+                    case OBJECTIVE:
+                        resume.addSection(type, new TextSection(dis.readUTF()));
+                        break;
+                    case ACHIEVEMENT:
+                    case QUALIFICATIONS:
+                        List<String> list = new ArrayList<>();
+                        int listSize = dis.readInt();
+                        for (int j = 0; j < listSize; j++) {
+                            list.add(dis.readUTF());
                         }
-                        List<Place.Period> periodList = new ArrayList<>();
-                        int periodSize = dis.readInt();
-                        for (int k = 0; k < periodSize; k++) {
-                            LocalDate start = LocalDate.parse(dis.readUTF());
-                            LocalDate end = LocalDate.parse(dis.readUTF());
-                            String position = dis.readUTF();
-                            String description = dis.readUTF();
-                            if (description.equals("null")) {
-                                periodList.add(new Place.Period(start, end, position, null));
+                        resume.addSection(type, new ParagraphSection(list));
+                        break;
+                    case EXPERIENCE:
+                    case EDUCATION:
+                        List<Place> places = new ArrayList<>();
+                        int placeSize = dis.readInt();
+                        for (int j = 0; j < placeSize; j++) {
+                            Link link;
+                            String name = dis.readUTF();
+                            String url = dis.readUTF();
+                            if (url.isEmpty()) {
+                                link = new Link(name, null);
                             } else {
-                                periodList.add(new Place.Period(start, end, position, description));
+                                link = new Link(name, url);
                             }
+                            List<Place.Period> periodList = new ArrayList<>();
+                            int periodSize = dis.readInt();
+                            for (int k = 0; k < periodSize; k++) {
+                                LocalDate start = LocalDate.parse(dis.readUTF());
+                                LocalDate end = LocalDate.parse(dis.readUTF());
+                                String position = dis.readUTF();
+                                String description = dis.readUTF();
+                                if (description.isEmpty()) {
+                                    periodList.add(new Place.Period(start, end, position, null));
+                                } else {
+                                    periodList.add(new Place.Period(start, end, position, description));
+                                }
+                            }
+                            places.add(new Place(link, periodList));
                         }
-                        places.add(new Place(link, periodList));
-                    }
-                    resume.addSection(type, new PlaceSection(places));
+                        resume.addSection(type, new PlaceSection(places));
+                        break;
                 }
             }
             return resume;
