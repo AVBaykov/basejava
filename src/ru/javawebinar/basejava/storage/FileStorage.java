@@ -32,7 +32,7 @@ public class FileStorage extends AbstractStorage<File> {
     private File[] listFilesSafety(File directory) {
         File[] files = directory.listFiles();
         if (files == null) {
-            throw new StorageException("Directory read error ", directory.getName());
+            throw new StorageException("Directory process error ", directory.getName());
         } else {
             return files;
         }

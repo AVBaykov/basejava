@@ -78,7 +78,7 @@ public class PathStorage extends AbstractStorage<Path> {
         try {
             return Files.list(directory).map(this::doGet);
         } catch (IOException e) {
-            throw new StorageException("Directory read error", directory.toString());
+            throw new StorageException("Directory process error", directory.toString());
         }
     }
 
@@ -96,7 +96,7 @@ public class PathStorage extends AbstractStorage<Path> {
         try {
             return (int) Files.list(directory).count();
         } catch (IOException e) {
-            throw new StorageException("Directory read error", directory.toString());
+            throw new StorageException("Directory process error", directory.toString());
         }
     }
 }

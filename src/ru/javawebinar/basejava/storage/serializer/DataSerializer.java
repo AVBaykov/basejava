@@ -5,8 +5,8 @@ import ru.javawebinar.basejava.model.*;
 import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 public class DataSerializer implements Serializer {
     @Override
@@ -14,64 +14,33 @@ public class DataSerializer implements Serializer {
         try (DataOutputStream dos = new DataOutputStream(os)) {
             dos.writeUTF(resume.getUuid());
             dos.writeUTF(resume.getFullName());
-            Map<ContactType, String> contacts = resume.getContacts();
-            dos.writeInt(contacts.size());
-            for (Map.Entry<ContactType, String> entry : contacts.entrySet()) {
+
+            writeCollection(dos, resume.getContacts().entrySet(), entry -> {
                 dos.writeUTF(entry.getKey().name());
                 dos.writeUTF(entry.getValue());
-            }
-            Map<SectionType, Section> sections = resume.getSections();
-            dos.writeInt(sections.size());
+            });
 
-            for (Map.Entry<SectionType, Section> entry : sections.entrySet()) {
+            writeCollection(dos, resume.getSections().entrySet(), entry -> {
                 SectionType type = entry.getKey();
+                Section section = entry.getValue();
                 dos.writeUTF(type.name());
                 switch (type) {
                     case PERSONAL:
                     case OBJECTIVE:
-                        dos.writeUTF(((TextSection) entry.getValue()).getContent());
+                        dos.writeUTF(((TextSection) section).getContent());
                         break;
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
-                        List<String> list = ((ParagraphSection) entry.getValue()).getParagraphList();
-                        dos.writeInt(list.size());
-                        for (String s : list) {
-                            dos.writeUTF(s);
-                        }
+                        writeCollection(dos, ((ParagraphSection) section).getParagraphList(), dos::writeUTF);
                         break;
                     case EXPERIENCE:
                     case EDUCATION:
-                        List<Place> placeList = ((PlaceSection) entry.getValue()).getPlaces();
-                        dos.writeInt(placeList.size());
-                        for (Place place : placeList) {
-                            String name = place.getHomePage().getName();
-                            String url = place.getHomePage().getUrl();
-                            dos.writeUTF(name);
-                            if (url != null) {
-                                dos.writeUTF(url);
-                            } else {
-                                dos.writeUTF("");
-                            }
-                            List<Place.Period> periodList = place.getPeriodList();
-                            dos.writeInt(periodList.size());
-                            for (Place.Period period : periodList) {
-                                String start = period.getStartDate().toString();
-                                String end = period.getEndDate().toString();
-                                String position = period.getPosition();
-                                String description = period.getDescription();
-                                dos.writeUTF(start);
-                                dos.writeUTF(end);
-                                dos.writeUTF(position);
-                                if (description != null) {
-                                    dos.writeUTF(description);
-                                } else {
-                                    dos.writeUTF("");
-                                }
-                            }
-                        }
-                        break;
+                        writeCollection(dos, ((PlaceSection) section).getPlaces(), place -> {
+                            writeLink(dos, place);
+                            writeCollection(dos, place.getPeriodList(), period -> writePeriod(dos, period));
+                        });
                 }
-            }
+            });
         }
     }
 
@@ -81,60 +50,89 @@ public class DataSerializer implements Serializer {
             String uuid = dis.readUTF();
             String fullName = dis.readUTF();
             Resume resume = new Resume(uuid, fullName);
-            int size = dis.readInt();
-            for (int i = 0; i < size; i++) {
-                resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF());
-            }
-            size = dis.readInt();
-            for (int i = 0; i < size; i++) {
+
+            readItems(dis, () -> resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF()));
+
+            readItems(dis, () -> {
                 SectionType type = SectionType.valueOf(dis.readUTF());
-                switch (type) {
-                    case PERSONAL:
-                    case OBJECTIVE:
-                        resume.addSection(type, new TextSection(dis.readUTF()));
-                        break;
-                    case ACHIEVEMENT:
-                    case QUALIFICATIONS:
-                        List<String> list = new ArrayList<>();
-                        int listSize = dis.readInt();
-                        for (int j = 0; j < listSize; j++) {
-                            list.add(dis.readUTF());
-                        }
-                        resume.addSection(type, new ParagraphSection(list));
-                        break;
-                    case EXPERIENCE:
-                    case EDUCATION:
-                        List<Place> places = new ArrayList<>();
-                        int placeSize = dis.readInt();
-                        for (int j = 0; j < placeSize; j++) {
-                            Link link;
-                            String name = dis.readUTF();
-                            String url = dis.readUTF();
-                            if (url.isEmpty()) {
-                                link = new Link(name, null);
-                            } else {
-                                link = new Link(name, url);
-                            }
-                            List<Place.Period> periodList = new ArrayList<>();
-                            int periodSize = dis.readInt();
-                            for (int k = 0; k < periodSize; k++) {
-                                LocalDate start = LocalDate.parse(dis.readUTF());
-                                LocalDate end = LocalDate.parse(dis.readUTF());
-                                String position = dis.readUTF();
-                                String description = dis.readUTF();
-                                if (description.isEmpty()) {
-                                    periodList.add(new Place.Period(start, end, position, null));
-                                } else {
-                                    periodList.add(new Place.Period(start, end, position, description));
-                                }
-                            }
-                            places.add(new Place(link, periodList));
-                        }
-                        resume.addSection(type, new PlaceSection(places));
-                        break;
-                }
-            }
+                resume.addSection(type, readSection(dis, type));
+            });
+
             return resume;
+        }
+    }
+
+    private Section readSection(DataInputStream dis, SectionType type) throws IOException {
+        switch (type) {
+            case PERSONAL:
+            case OBJECTIVE:
+                return new TextSection(dis.readUTF());
+            case ACHIEVEMENT:
+            case QUALIFICATIONS:
+                return new ParagraphSection(readList(dis, dis::readUTF));
+            case EXPERIENCE:
+            case EDUCATION:
+                return new PlaceSection(
+                        readList(dis, () -> new Place(
+                                new Link(dis.readUTF(), dis.readUTF()),
+                                readList(dis, () -> new Place.Period(
+                                        LocalDate.parse(dis.readUTF()),
+                                        LocalDate.parse(dis.readUTF()),
+                                        dis.readUTF(),
+                                        dis.readUTF()
+                                ))
+                        ))
+                );
+            default:
+                throw new IllegalStateException();
+        }
+    }
+
+    private <T> List<T> readList(DataInputStream dis, ElementReader<T> reader) throws IOException {
+        int listSize = dis.readInt();
+        List<T> list = new ArrayList<>();
+        for (int j = 0; j < listSize; j++) {
+            list.add(reader.read());
+        }
+        return list;
+    }
+
+    private void writeLink(DataOutputStream dos, Place place) throws IOException {
+        dos.writeUTF(place.getHomePage().getName());
+        dos.writeUTF(place.getHomePage().getUrl());
+
+    }
+
+    private void writePeriod(DataOutputStream dos, Place.Period period) throws IOException {
+        dos.writeUTF(period.getStartDate().toString());
+        dos.writeUTF(period.getEndDate().toString());
+        dos.writeUTF(period.getPosition());
+        dos.writeUTF(period.getDescription());
+    }
+
+    private interface ElementReader<T> {
+        T read() throws IOException;
+    }
+
+    private interface ElementWriter<T> {
+        void write(T t) throws IOException;
+    }
+
+    private <T> void writeCollection(DataOutputStream dos, Collection<T> collection, ElementWriter<T> writer) throws IOException {
+        dos.writeInt(collection.size());
+        for (T element : collection) {
+            writer.write(element);
+        }
+    }
+
+    private interface ElementProcessor {
+        void process() throws IOException;
+    }
+
+    private void readItems(DataInputStream dis, ElementProcessor processor) throws IOException {
+        int size = dis.readInt();
+        for (int i = 0; i < size; i++) {
+            processor.process();
         }
     }
 }
