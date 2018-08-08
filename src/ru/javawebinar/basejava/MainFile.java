@@ -3,7 +3,7 @@ package ru.javawebinar.basejava;
 import java.io.File;
 import java.util.Objects;
 
-public class MailFile {
+public class MainFile {
     public static void main(String[] args) {
         File dir = new File(System.getProperty("user.dir"));
 
