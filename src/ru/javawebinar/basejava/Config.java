@@ -29,4 +29,8 @@ public class Config {
     public File getStorageDir() {
         return storageDir;
     }
+
+    public String getProperty(String s) {
+        return props.getProperty(s);
+    }
 }
