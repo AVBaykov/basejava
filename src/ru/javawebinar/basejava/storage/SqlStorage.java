@@ -1,43 +1,33 @@
 package ru.javawebinar.basejava.storage;
 
-import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.NotExistStorageException;
-import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
 import ru.javawebinar.basejava.sql.ConnectionFactory;
-import ru.javawebinar.basejava.util.SqlHelper;
+import ru.javawebinar.basejava.sql.SqlHelper;
 
-import java.sql.*;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SqlStorage implements Storage {
     public final ConnectionFactory connectionFactory;
+    private final SqlHelper sqlHelper;
 
     public SqlStorage(String dbUrl, String dbUser, String dbPassword) {
         connectionFactory = () -> DriverManager.getConnection(dbUrl, dbUser, dbPassword);
-    }
-
-    private <T> T statementExecute(String ddl, SqlHelper<T> sqlHelper) {
-        try (Connection conn = connectionFactory.getConnection();
-             PreparedStatement ps = conn.prepareStatement(ddl)) {
-            return sqlHelper.helperExecute(ps);
-        } catch (SQLException e) {
-            if (e.getSQLState().equals("23505")) {
-                throw new ExistStorageException("");
-            }
-            throw new StorageException(e);
-        }
+        sqlHelper = new SqlHelper(connectionFactory);
     }
 
     @Override
     public void clear() {
-        statementExecute("DELETE FROM resume", PreparedStatement::execute);
+        sqlHelper.statementExecute("DELETE FROM resume", PreparedStatement::execute);
     }
 
     @Override
     public void update(Resume resume) {
-        statementExecute("UPDATE resume SET full_name =? WHERE uuid =?", ps -> {
+        sqlHelper.statementExecute("UPDATE resume SET full_name =? WHERE uuid =?", ps -> {
             ps.setString(1, resume.getFullName());
             ps.setString(2, resume.getUuid());
             if (ps.executeUpdate() == 0) {
@@ -50,7 +40,7 @@ public class SqlStorage implements Storage {
     @Override
     public void save(Resume resume) {
 
-        statementExecute("INSERT INTO resume (uuid, full_name) VALUES (?,?)", ps -> {
+        sqlHelper.statementExecute("INSERT INTO resume (uuid, full_name) VALUES (?,?)", ps -> {
             ps.setString(1, resume.getUuid());
             ps.setString(2, resume.getFullName());
             ps.execute();
@@ -60,7 +50,7 @@ public class SqlStorage implements Storage {
 
     @Override
     public Resume get(String uuid) {
-        return statementExecute("SELECT * FROM resume r WHERE r.uuid =?", ps -> {
+        return sqlHelper.statementExecute("SELECT * FROM resume r WHERE r.uuid =?", ps -> {
             ps.setString(1, uuid);
             ResultSet rs = ps.executeQuery();
             if (!rs.next()) {
@@ -72,7 +62,7 @@ public class SqlStorage implements Storage {
 
     @Override
     public void delete(String uuid) {
-        statementExecute("DELETE FROM resume r WHERE r.uuid =?", ps -> {
+        sqlHelper.statementExecute("DELETE FROM resume r WHERE r.uuid =?", ps -> {
             ps.setString(1, uuid);
             if (!ps.execute()) {
                 throw new NotExistStorageException(uuid);
@@ -83,7 +73,7 @@ public class SqlStorage implements Storage {
 
     @Override
     public List<Resume> getAllSorted() {
-        return statementExecute("SELECT * FROM resume r ORDER BY r.full_name, r.uuid", ps -> {
+        return sqlHelper.statementExecute("SELECT * FROM resume r ORDER BY r.full_name, r.uuid", ps -> {
             List<Resume> result = new ArrayList<>();
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -97,7 +87,7 @@ public class SqlStorage implements Storage {
 
     @Override
     public int size() {
-        return statementExecute("SELECT COUNT(*) AS total FROM resume", ps -> {
+        return sqlHelper.statementExecute("SELECT COUNT(*) AS total FROM resume", ps -> {
             ResultSet rs = ps.executeQuery();
             rs.next();
             return rs.getInt("total");
