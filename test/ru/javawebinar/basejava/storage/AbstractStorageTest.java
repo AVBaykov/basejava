@@ -5,11 +5,10 @@ import org.junit.Test;
 import ru.javawebinar.basejava.Config;
 import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.NotExistStorageException;
-import ru.javawebinar.basejava.exception.StorageException;
-import ru.javawebinar.basejava.model.*;
+import ru.javawebinar.basejava.model.ContactType;
+import ru.javawebinar.basejava.model.Resume;
 
 import java.io.File;
-import java.time.Month;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -18,7 +17,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 public abstract class AbstractStorageTest {
-    protected static final File STORAGE_DIR = Config.get().getStorageDir();
+    static final File STORAGE_DIR = Config.get().getStorageDir();
 
     Storage storage;
 
@@ -38,8 +37,8 @@ public abstract class AbstractStorageTest {
         resume3 = new Resume(UUID_3, "Name3");
         resume4 = new Resume(UUID_4, "Name4");
 
-//        resume1.addContact(ContactType.EMAIL, "mail1@ya.ru");
-//        resume1.addContact(ContactType.PHONE, "11111");
+        resume1.addContact(ContactType.EMAIL, "mail1@ya.ru");
+        resume1.addContact(ContactType.PHONE, "11111");
 //        resume1.addSection(SectionType.OBJECTIVE, new TextSection("Objective1"));
 //        resume1.addSection(SectionType.PERSONAL, new TextSection("Personal data"));
 //        resume1.addSection(SectionType.ACHIEVEMENT, new ParagraphSection("Achivment11", "Achivment12", "Achivment13"));
@@ -55,8 +54,8 @@ public abstract class AbstractStorageTest {
 //                                new Place.Period(1996, Month.JANUARY, 2000, Month.DECEMBER, "aspirant", null),
 //                                new Place.Period(2001, Month.MARCH, 2005, Month.JANUARY, "student", "IT facultet")),
 //                        new Place("Place12", "http://Place12.ru")));
-//        resume2.addContact(ContactType.SKYPE, "skype2");
-//        resume2.addContact(ContactType.PHONE, "22222");
+        resume2.addContact(ContactType.SKYPE, "skype2");
+        resume2.addContact(ContactType.PHONE, "22222");
 //        resume2.addSection(SectionType.EXPERIENCE,
 //                new PlaceSection(
 //                        new Place("Place2", "http://Place2.ru",
@@ -85,6 +84,9 @@ public abstract class AbstractStorageTest {
     @Test
     public void update() {
         Resume newResume = new Resume(UUID_1, "New Name");
+        newResume.addContact(ContactType.EMAIL, "gmail@gmail.com");
+        newResume.addContact(ContactType.PHONE, "22222");
+        newResume.addContact(ContactType.SKYPE, "skype");
         storage.update(newResume);
         assertEquals(newResume, storage.get(UUID_1));
     }
