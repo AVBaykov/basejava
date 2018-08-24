@@ -9,9 +9,7 @@ import ru.javawebinar.basejava.model.ContactType;
 import ru.javawebinar.basejava.model.Resume;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -70,9 +68,9 @@ public abstract class AbstractStorageTest {
     @Before
     public void setUp() {
         storage.clear();
-        storage.save(resume2);
-        storage.save(resume1);
         storage.save(resume3);
+        storage.save(resume1);
+        storage.save(resume2);
     }
 
     @Test
@@ -120,7 +118,9 @@ public abstract class AbstractStorageTest {
     public void getAllSorted() {
         List<Resume> list = storage.getAllSorted();
         assertEquals(3, list.size());
-        assertEquals(list, Arrays.asList(resume1, resume2, resume3));
+        List<Resume> sortedResumes = Arrays.asList(resume1, resume2, resume3);
+        sortedResumes.sort(Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid));
+        assertEquals(list, sortedResumes);
     }
 
     @Test(expected = NotExistStorageException.class)
