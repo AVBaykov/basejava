@@ -93,8 +93,8 @@ public class SqlStorage implements Storage {
     @Override
     public List<Resume> getAllSorted() {
         return sqlHelper.transactionExecute(conn -> {
-            Map<String, Resume> resumes = new HashMap<>();
-            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM resume")) {
+            Map<String, Resume> resumes = new LinkedHashMap<>();
+            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM resume r ORDER BY r.full_name, r.uuid")) {
                 ResultSet rs = ps.executeQuery();
                 while (rs.next()) {
                     String uuid = rs.getString("uuid");
@@ -110,9 +110,7 @@ public class SqlStorage implements Storage {
                     resumes.get(rs.getString("resume_uuid")).addContact(type, contact);
                 }
             }
-            List<Resume> result = new ArrayList<>(resumes.values());
-            result.sort(Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid));
-            return result;
+            return new ArrayList<>(resumes.values());
         });
     }
 

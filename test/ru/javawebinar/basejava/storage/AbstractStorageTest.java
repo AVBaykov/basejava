@@ -120,7 +120,7 @@ public abstract class AbstractStorageTest {
         assertEquals(3, list.size());
         List<Resume> sortedResumes = Arrays.asList(resume1, resume2, resume3);
         sortedResumes.sort(Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid));
-        assertEquals(list, sortedResumes);
+        assertEquals(sortedResumes, list);
     }
 
     @Test(expected = NotExistStorageException.class)
