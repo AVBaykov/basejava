@@ -5,11 +5,13 @@ import org.junit.Test;
 import ru.javawebinar.basejava.Config;
 import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.NotExistStorageException;
-import ru.javawebinar.basejava.model.ContactType;
-import ru.javawebinar.basejava.model.Resume;
+import ru.javawebinar.basejava.model.*;
 
 import java.io.File;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -37,10 +39,10 @@ public abstract class AbstractStorageTest {
 
         resume1.addContact(ContactType.EMAIL, "mail1@ya.ru");
         resume1.addContact(ContactType.PHONE, "11111");
-//        resume1.addSection(SectionType.OBJECTIVE, new TextSection("Objective1"));
-//        resume1.addSection(SectionType.PERSONAL, new TextSection("Personal data"));
-//        resume1.addSection(SectionType.ACHIEVEMENT, new ParagraphSection("Achivment11", "Achivment12", "Achivment13"));
-//        resume1.addSection(SectionType.QUALIFICATIONS, new ParagraphSection("Java", "SQL", "JavaScript"));
+        resume1.addSection(SectionType.OBJECTIVE, new TextSection("Objective1"));
+        resume1.addSection(SectionType.PERSONAL, new TextSection("Personal data"));
+        resume1.addSection(SectionType.ACHIEVEMENT, new ParagraphSection("Achivment11", "Achivment12", "Achivment13"));
+        resume1.addSection(SectionType.QUALIFICATIONS, new ParagraphSection("Java", "SQL", "JavaScript"));
 //        resume1.addSection(SectionType.EXPERIENCE,
 //                new PlaceSection(
 //                        new Place("Place11", "http://Place11.ru",
@@ -85,6 +87,11 @@ public abstract class AbstractStorageTest {
         newResume.addContact(ContactType.EMAIL, "gmail@gmail.com");
         newResume.addContact(ContactType.PHONE, "22222");
         newResume.addContact(ContactType.SKYPE, "skype");
+        newResume.addSection(SectionType.OBJECTIVE, new TextSection("ObjectiveNew"));
+        newResume.addSection(SectionType.PERSONAL, new TextSection("Newest Personal data"));
+        newResume.addSection(SectionType.ACHIEVEMENT, new ParagraphSection("AchivmentNew", "Achivment12new", "Achivment13NEW"));
+        newResume.addSection(SectionType.QUALIFICATIONS, new ParagraphSection("Java NEW", "SQL BIF", "JavaScript BUF" +
+                ""));
         storage.update(newResume);
         assertEquals(newResume, storage.get(UUID_1));
     }
