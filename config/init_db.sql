@@ -27,23 +27,21 @@ CREATE UNIQUE INDEX contact_uuid_type_index
 alter table contact
   owner to postgres;
 
-create table text_section
+create table section
 (
-  id serial not null
+  id           serial   not null
     constraint section_pkey
     primary key,
-  type text not null,
-  value text not null,
-  resume_uuid char(36) not null
+  section_type text     not null,
+  content      text     not null,
+  resume_uuid  char(36) not null
     constraint section_resume_uuid_fk
     references resume
     on delete cascade
-)
-;
+);
 
-alter table string_section owner to postgres
-;
+alter table section
+  owner to postgres;
 
-create index text_section_uuid_index
-  on string_section (resume_uuid)
-;
+create unique index section_uuid_type_index
+  on section (resume_uuid, section_type);

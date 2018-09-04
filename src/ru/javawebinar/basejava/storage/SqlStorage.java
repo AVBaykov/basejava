@@ -33,9 +33,9 @@ public class SqlStorage implements Storage {
                 }
             }
             deleteContacts(resume, conn);
-            deleteStringSections(resume, conn);
+            deleteSections(resume, conn);
             insertContacts(resume, conn);
-            insertStringSections(resume, conn);
+            insertSections(resume, conn);
             return null;
         });
     }
@@ -49,7 +49,7 @@ public class SqlStorage implements Storage {
                 ps.execute();
             }
             insertContacts(resume, conn);
-            insertStringSections(resume, conn);
+            insertSections(resume, conn);
             return null;
         });
     }
@@ -60,7 +60,7 @@ public class SqlStorage implements Storage {
                         "SELECT * FROM resume r \n" +
                         "LEFT JOIN contact c " +
                         "    ON r.uuid = c.resume_uuid " +
-                        "LEFT JOIN string_section ss" +
+                        "LEFT JOIN section ss" +
                         "    ON r.uuid = ss.resume_uuid" +
                         " WHERE r.uuid =? ",
                 ps -> {
@@ -72,7 +72,7 @@ public class SqlStorage implements Storage {
                     Resume resume = new Resume(uuid, rs.getString("full_name"));
                     do {
                         addContact(resume, rs);
-                        addStringSection(resume, rs);
+                        addSection(resume, rs);
                     } while (rs.next());
 
                     return resume;
@@ -108,10 +108,10 @@ public class SqlStorage implements Storage {
                     addContact(resumes.get(rs.getString("resume_uuid")), rs);
                 }
             }
-            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM string_section")) {
+            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM section")) {
                 ResultSet rs = ps.executeQuery();
                 while (rs.next()) {
-                    addStringSection(resumes.get(rs.getString("resume_uuid")), rs);
+                    addSection(resumes.get(rs.getString("resume_uuid")), rs);
                 }
             }
             return new ArrayList<>(resumes.values());
@@ -153,16 +153,16 @@ public class SqlStorage implements Storage {
         }
     }
 
-    private void deleteStringSections(Resume resume, Connection conn) {
-        sqlHelper.execute("DELETE  FROM string_section WHERE resume_uuid=?", ps -> {
+    private void deleteSections(Resume resume, Connection conn) {
+        sqlHelper.execute("DELETE  FROM section WHERE resume_uuid=?", ps -> {
             ps.setString(1, resume.getUuid());
             ps.execute();
             return null;
         });
     }
 
-    private void insertStringSections(Resume resume, Connection conn) throws SQLException {
-        try (PreparedStatement ps = conn.prepareStatement("INSERT INTO string_section (resume_uuid, section_type, content) VALUES (?,?,?)")) {
+    private void insertSections(Resume resume, Connection conn) throws SQLException {
+        try (PreparedStatement ps = conn.prepareStatement("INSERT INTO section (resume_uuid, section_type, content) VALUES (?,?,?)")) {
             for (Map.Entry<SectionType, Section> e : resume.getSections().entrySet()) {
                 ps.setString(1, resume.getUuid());
                 switch (e.getKey()) {
@@ -185,15 +185,19 @@ public class SqlStorage implements Storage {
         }
     }
 
-    private void addStringSection(Resume resume, ResultSet rs) throws SQLException {
+    private void addSection(Resume resume, ResultSet rs) throws SQLException {
         String type = rs.getString("section_type");
         if (type != null) {
             SectionType sType = SectionType.valueOf(type);
-            String[] content = rs.getString("content").split("\n");
-            if (content.length == 1) {
-                resume.addSection(sType, new TextSection(content[0]));
-            } else {
-                resume.addSection(sType, new ParagraphSection(content));
+            switch (sType) {
+                case PERSONAL:
+                case OBJECTIVE:
+                    resume.addSection(sType, new TextSection(rs.getString("content")));
+                    break;
+                case ACHIEVEMENT:
+                case QUALIFICATIONS:
+                    resume.addSection(sType, new ParagraphSection(rs.getString("content").split("\n")));
+                    break;
             }
         }
     }
