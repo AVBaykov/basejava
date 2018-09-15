@@ -1,3 +1,4 @@
+<%@ page import="ru.javawebinar.basejava.util.HtmlUtil" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
@@ -19,6 +20,14 @@
                          type="java.util.Map.Entry<ru.javawebinar.basejava.model.ContactType, java.lang.String>"/>
                 <%=contactEntry.getKey().toHtml(contactEntry.getValue())%><br/>
         </c:forEach>
+    <hr>
+    <c:forEach var="sectionEntry" items="${resume.sections}">
+        <jsp:useBean id="sectionEntry"
+                     type="java.util.Map.Entry<ru.javawebinar.basejava.model.SectionType, ru.javawebinar.basejava.model.Section>"/>
+        <h2><%=sectionEntry.getKey().getTitle()%>
+        </h2><br/>
+        <%=HtmlUtil.toHtml(sectionEntry.getValue())%><br/>
+    </c:forEach>
     <p>
 </section>
 <jsp:include page="fragments/footer.jsp"/>

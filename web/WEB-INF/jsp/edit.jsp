@@ -1,4 +1,6 @@
 <%@ page import="ru.javawebinar.basejava.model.ContactType" %>
+<%@ page import="ru.javawebinar.basejava.model.SectionType" %>
+<%@ page import="ru.javawebinar.basejava.model.TextSection" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
@@ -25,6 +27,11 @@
                 <dt>${type.title}</dt>
                 <dd><input type="text" name="${type.name()}" size="30" value="${resume.getContact(type)}"></dd>
             </dl>
+        </c:forEach>
+        <h3>Секции:</h3>
+        <c:forEach var="type" items="<%=SectionType.values()%>">
+            <dt>${type.title}</dt>
+            <dd><input type="text" name="${type.name()}" value="${resume.getSection(type)}"></dd><br/>
         </c:forEach>
         <hr>
         <button type="submit">Сохранить</button>
