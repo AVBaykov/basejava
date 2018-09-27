@@ -1,6 +1,7 @@
 <%@ page import="ru.javawebinar.basejava.model.ContactType" %>
 <%@ page import="ru.javawebinar.basejava.model.SectionType" %>
-<%@ page import="ru.javawebinar.basejava.model.TextSection" %>
+<%@ page import="ru.javawebinar.basejava.model.Section" %>
+<%@ page import="ru.javawebinar.basejava.model.ParagraphSection" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
@@ -29,9 +30,20 @@
             </dl>
         </c:forEach>
         <h3>Секции:</h3>
+        <% pageContext.setAttribute("String", SectionType.ACHIEVEMENT.name());%>
         <c:forEach var="type" items="<%=SectionType.values()%>">
-            <dt>${type.title}</dt>
-            <dd><input type="text" name="${type.name()}" value="${resume.getSection(type)}"></dd><br/>
+            <dl>
+                <c:choose>
+                    <c:when test="${type.ordinal() le 1}">
+                        <dt>${type.title}</dt>
+                        <dd><input type="text" name="${type.name()}" size="30" value="${resume.getSection(type)}"></dd>
+                    </c:when>
+                    <c:when test="${type.ordinal() ge 2 && type.ordinal() le 3}">
+                        <dt>${type.title}</dt>
+                        <dd><<textarea name="${type.name()}" id="" cols="30" rows="10">${resume.getSection(type)}</textarea>></dd>
+                    </c:when>
+                </c:choose>
+            </dl>
         </c:forEach>
         <hr>
         <button type="submit">Сохранить</button>

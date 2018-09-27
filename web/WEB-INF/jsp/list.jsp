@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="ru.javawebinar.basejava.model.ContactType" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
 
 
 <html>
@@ -16,7 +16,7 @@
         <tr>
             <th>Имя</th>
             <th>Email</th>
-            <th></th>
+            <th><a href="resume?action=create"><img src="img/add.png"></a></th>
             <th></th>
         </tr>
         <c:forEach items="${resumes}" var="resume">

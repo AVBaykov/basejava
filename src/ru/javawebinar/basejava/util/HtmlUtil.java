@@ -11,9 +11,7 @@ public class HtmlUtil {
             return ((TextSection) section).getContent();
         } else if (section instanceof ParagraphSection) {
             StringBuilder sb = new StringBuilder();
-            ((ParagraphSection) section).getParagraphList().forEach(p -> {
-                sb.append("<li>").append(p).append("</li>");
-            });
+            ((ParagraphSection) section).getParagraphList().forEach(p -> sb.append("<li>").append(p).append("</li>"));
             return sb.toString();
         } else return "";
     }

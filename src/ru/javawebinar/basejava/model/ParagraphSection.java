@@ -25,12 +25,12 @@ public class ParagraphSection extends Section {
         return paragraphList;
     }
 
-        @Override
-        public String toString() {
-            StringBuilder builder = new StringBuilder();
-            paragraphList.forEach(paragraph -> builder.append(paragraph).append(" "));
-            return builder.toString();
-        }
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        paragraphList.forEach(str -> sb.append(str).append("\n"));
+        return sb.toString();
+    }
 
     @Override
     public boolean equals(Object o) {

@@ -44,7 +44,7 @@ public class ResumeServlet extends HttpServlet {
                         break;
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
-                        r.addSection(type, new ParagraphSection(value.split("\\W")));
+                        r.addSection(type, new ParagraphSection(value.split("\n")));
                         break;
                 }
             } else {
@@ -72,6 +72,10 @@ public class ResumeServlet extends HttpServlet {
             case "view":
             case "edit":
                 r = storage.get(uuid);
+                break;
+            case "create":
+                r = new Resume("");
+                storage.save(r);
                 break;
             default:
                 throw new IllegalArgumentException("Action " + action + " is illegal");
