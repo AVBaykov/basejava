@@ -20,6 +20,8 @@ import static ru.javawebinar.basejava.util.DateUtil.of;
 public class Place implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    public static final Place EMPTY = new Place("", "", Period.EMPTY);
+
 
     private Link homePage;
     private List<Period> periodList = new ArrayList<>();
@@ -70,6 +72,8 @@ public class Place implements Serializable {
 
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class Period implements Serializable {
+        public static final Period EMPTY = new Period();
+
         @XmlJavaTypeAdapter(LocalDateAdapter.class)
         private LocalDate startDate;
         @XmlJavaTypeAdapter(LocalDateAdapter.class)
@@ -116,7 +120,7 @@ public class Place implements Serializable {
 
         @Override
         public String toString() {
-            return String.format("n%tm/%<tY - %tm/%<tY %s\n%s\n", startDate, endDate, position, description);
+            return String.format("%tm/%<tY - %tm/%<tY %s\n%s\n", startDate, endDate, position, description);
         }
 
         @Override

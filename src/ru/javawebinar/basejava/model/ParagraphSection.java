@@ -7,6 +7,8 @@ import java.util.Objects;
 public class ParagraphSection extends Section {
     private static final long serialVersionUID = 1L;
 
+    public static final ParagraphSection EMPTY = new ParagraphSection("");
+
     private List<String> paragraphList;
 
     public ParagraphSection() {
@@ -27,9 +29,7 @@ public class ParagraphSection extends Section {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        paragraphList.forEach(str -> sb.append(str).append("\n"));
-        return sb.toString();
+        return paragraphList.toString();
     }
 
     @Override

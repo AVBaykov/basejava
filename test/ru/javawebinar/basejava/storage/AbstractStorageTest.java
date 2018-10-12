@@ -43,13 +43,13 @@ public abstract class AbstractStorageTest {
     @Test
     public void update() {
         Resume newResume = new Resume(UUID_1, "New Name");
-        newResume.addContact(ContactType.EMAIL, "gmail@gmail.com");
-        newResume.addContact(ContactType.PHONE, "22222");
-        newResume.addContact(ContactType.SKYPE, "skype");
-        newResume.addSection(SectionType.OBJECTIVE, new TextSection("ObjectiveNew"));
-        newResume.addSection(SectionType.PERSONAL, new TextSection("Newest Personal data"));
-        newResume.addSection(SectionType.ACHIEVEMENT, new ParagraphSection("AchivmentNew", "Achivment12new", "Achivment13NEW"));
-        newResume.addSection(SectionType.QUALIFICATIONS, new ParagraphSection("Java NEW", "SQL BIF", "JavaScript BUF" +
+        newResume.setContact(ContactType.EMAIL, "gmail@gmail.com");
+        newResume.setContact(ContactType.PHONE, "22222");
+        newResume.setContact(ContactType.SKYPE, "skype");
+        newResume.setSection(SectionType.OBJECTIVE, new TextSection("ObjectiveNew"));
+        newResume.setSection(SectionType.PERSONAL, new TextSection("Newest Personal data"));
+        newResume.setSection(SectionType.ACHIEVEMENT, new ParagraphSection("AchivmentNew", "Achivment12new", "Achivment13NEW"));
+        newResume.setSection(SectionType.QUALIFICATIONS, new ParagraphSection("Java NEW", "SQL BIF", "JavaScript BUF" +
                 ""));
         storage.update(newResume);
         assertEquals(newResume, storage.get(UUID_1));
